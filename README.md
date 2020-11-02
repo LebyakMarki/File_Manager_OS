@@ -1,2 +1,6 @@
 # File_Manager_OS
- File mnager created with Qt and c++
+ File manager created with Qt and c++
+ 
+ Team:
+ - Marki Lebyak
+ - Katya Detsyk
