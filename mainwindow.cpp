@@ -2,13 +2,15 @@
 #include "./ui_mainwindow.h"
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QFileDialog>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    current_font_size = QApplication::font().pointSize();
     // Showing amount of available free space
     QStorageInfo storage = QStorageInfo::root();
     qint64 available_bytes = storage.bytesAvailable()/1000000000;
@@ -21,13 +23,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->available_storage->setStyleSheet("QLabel { background-color : white; }");
 
     // Setting up models and initial path for them
-    QString sPath = QDir::homePath();
+    QString startPath = QDir::homePath();
     dirmodel_1= new QFileSystemModel(this);
     dirmodel_2= new QFileSystemModel(this);
     dirmodel_1->setFilter(QDir::AllEntries | QDir::NoDot);
-    dirmodel_1->setRootPath(sPath);
+    dirmodel_1->setRootPath(startPath);
     dirmodel_2->setFilter(QDir::AllEntries | QDir::NoDot);
-    dirmodel_2->setRootPath(sPath);
+    dirmodel_2->setRootPath(startPath);
     ui->tableView_1->setModel(dirmodel_1);
     ui->tableView_2->setModel(dirmodel_2);
 
@@ -70,12 +72,12 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionAbout_file_manager_triggered()
 {
-    QMessageBox::about(this, "KM File manager", "This is file manager build with Qt5");
+    QMessageBox::about(this, "KM File manager", "This is file manager build with Qt5 and C++ skills.");
 }
 
 void MainWindow::on_actionTeam_triggered()
 {
-    QMessageBox::about(this, "Our team:", "Katya Detsyk\nMarki Lebyak");
+    QMessageBox::about(this, "Our team:", "Katya Detsyk - best software engineer\nMarki Lebyak - just ok in programming");
 }
 
 void MainWindow::on_actionAbout_Qt_triggered()
@@ -85,13 +87,63 @@ void MainWindow::on_actionAbout_Qt_triggered()
 
 void MainWindow::on_actionNew_File_triggered()
 {
-
+    QFileDialog file_dialog;
+    file_dialog.setFileMode(QFileDialog::AnyFile);
+    QString file_name = file_dialog.getSaveFileName(this, "Creating file", "untitled.txt", "");
+    if (file_name.isEmpty()) {
+         QMessageBox::about(this, "File creation", "File not created.");
+         return;
+    }
+    QFile file(file_name);
+    if (!file.exists()) {
+        file.open(QIODevice::ReadWrite);
+        file.close();
+        QMessageBox::about(this, "File creation", "File created successfully.");
+    } else {
+        QMessageBox::about(this, "File creation", "File already exists.");
+    }
 }
 
 void MainWindow::on_actionNew_Folder_triggered()
 {
-    bool created;
-    QString folder_name = QInputDialog::getText(this, "New Folder creation", "Enter folder name: ",
-                                                QLineEdit::Normal, "no name", &created);
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select parent directory", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QDir directory(dir_name);
+    bool got_text;
+    QString new_dir_name = QInputDialog::getText(this, "Creating new directory", "Enter name:", QLineEdit::Normal, "untitled", &got_text);
+    if (got_text && !new_dir_name.isEmpty()) {
+        if (!directory.exists(new_dir_name)) {
+            directory.mkdir(new_dir_name);
+            QMessageBox::about(this, "Directory creation", "Directory created successfully.");
+        } else {
+            QMessageBox::about(this, "Directory creation", "Directory already exists.");
+        }
+    } else {
+        QMessageBox::about(this, "Directory creation", "Directory not created.");
+    }
+}
 
+void MainWindow::on_actionZoom_In_triggered()
+{
+    QFont font;
+    font.setPointSize(current_font_size + 1);
+    current_font_size += 1;
+    ui->tableView_1->setFont(font);
+    ui->tableView_2->setFont(font);
+}
+
+void MainWindow::on_actionZoom_Out_triggered()
+{
+    QFont font;
+    font.setPointSize(current_font_size - 1);
+    current_font_size -= 1;
+    ui->tableView_1->setFont(font);
+    ui->tableView_2->setFont(font);
+}
+
+void MainWindow::on_actionDefault_Zoom_triggered()
+{
+    QFont font;
+    font.setPointSize(QApplication::font().pointSize());
+    ui->tableView_1->setFont(font);
+    ui->tableView_2->setFont(font);
 }

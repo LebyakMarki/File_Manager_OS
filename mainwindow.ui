@@ -59,6 +59,7 @@
     </property>
     <addaction name="actionZoom_In"/>
     <addaction name="actionZoom_Out"/>
+    <addaction name="actionDefault_Zoom"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -67,7 +68,6 @@
     <addaction name="actionNew_File"/>
     <addaction name="actionNew_Folder"/>
     <addaction name="actionZip"/>
-    <addaction name="actionNew_Window"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -159,16 +159,28 @@
    </property>
   </action>
   <action name="actionRename">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Rename_32x32.png</normaloff>icons/Rename_32x32.png</iconset>
+   </property>
    <property name="text">
     <string>Rename</string>
    </property>
   </action>
   <action name="actionDelete">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Delete_32x32.png</normaloff>icons/Delete_32x32.png</iconset>
+   </property>
    <property name="text">
     <string>Delete</string>
    </property>
   </action>
   <action name="actionSearch">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Search_32x32.png</normaloff>icons/Search_32x32.png</iconset>
+   </property>
    <property name="text">
     <string>Search</string>
    </property>
@@ -179,18 +191,39 @@
    </property>
   </action>
   <action name="actionAbout_file_manager">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Help_32x32.png</normaloff>icons/Help_32x32.png</iconset>
+   </property>
    <property name="text">
     <string>About file manager</string>
    </property>
   </action>
   <action name="actionTeam">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Information_32x32.png</normaloff>icons/Information_32x32.png</iconset>
+   </property>
    <property name="text">
     <string>Team</string>
    </property>
   </action>
   <action name="actionAbout_Qt">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Information_32x32.png</normaloff>icons/Information_32x32.png</iconset>
+   </property>
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionDefault_Zoom">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Cancel_32x32.png</normaloff>icons/Cancel_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Default Zoom</string>
    </property>
   </action>
  </widget>

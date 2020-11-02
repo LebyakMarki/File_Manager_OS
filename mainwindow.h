@@ -21,22 +21,24 @@ public:
 private slots:
     void on_tableView_2_clicked(const QModelIndex &index);
     void on_tableView_1_clicked(const QModelIndex &index);
-
     void on_actionExit_triggered();
-
     void on_actionAbout_file_manager_triggered();
-
     void on_actionTeam_triggered();
-
     void on_actionAbout_Qt_triggered();
-
     void on_actionNew_File_triggered();
-
     void on_actionNew_Folder_triggered();
+
+    void on_actionZoom_In_triggered();
+
+    void on_actionZoom_Out_triggered();
+
+    void on_actionDefault_Zoom_triggered();
 
 private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirmodel_1;
     QFileSystemModel *dirmodel_2;
+    QString current_path;
+    int8_t current_font_size;
 };
 #endif // MAINWINDOW_H
