@@ -44,7 +44,8 @@ private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirmodel_1;
     QFileSystemModel *dirmodel_2;
-    QString current_path;
+    QString right_part_path;
+    QString left_part_path;
     int8_t current_font_size;
 };
 #endif // MAINWINDOW_H

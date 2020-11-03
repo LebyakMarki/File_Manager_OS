@@ -47,7 +47,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_1->setShowGrid(false);
     ui->tableView_2->setShowGrid(false);
 
+    // Setting paths
+    right_part_path = startPath;
+    left_part_path = startPath;
 
+    // Showing paths
+    ui->left_path->setText(startPath);
+    ui->right_path->setText(startPath);
+    ui->left_path->setStyleSheet("QLabel { background-color : white; }");
+    ui->right_path->setStyleSheet("QLabel { background-color : white; }");
 }
 
 MainWindow::~MainWindow()
@@ -59,12 +67,16 @@ void MainWindow::on_tableView_1_clicked(const QModelIndex &index)
 {
     QString sPath = dirmodel_1->fileInfo(index).absoluteFilePath();
     ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(sPath));
+    ui->left_path->setText(sPath);
+    left_part_path = sPath;
 }
 
 void MainWindow::on_tableView_2_clicked(const QModelIndex &index)
 {
     QString sPath = dirmodel_2->fileInfo(index).absoluteFilePath();
     ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(sPath));
+    ui->right_path->setText(sPath);
+    right_part_path = sPath;
 }
 
 void MainWindow::on_actionExit_triggered()
