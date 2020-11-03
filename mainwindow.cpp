@@ -227,3 +227,166 @@ void MainWindow::on_actionDelete_Directory_triggered()
         QMessageBox::about(this, "Directory deleting", "Directory not deleted.");
     }
 }
+
+
+void MainWindow::on_actionCopy_File_triggered()
+{
+    QString file_name = QFileDialog::getOpenFileName(this, "Select file to copy", "");
+    QFile file(file_name);
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QString file_copy_path = QString("%1/%2").arg(dir_name, file.fileName().section("/", -1, -1));
+    if (QFile::exists(file_copy_path)){
+        QFile::remove(file_copy_path);
+    }
+    if (QFile::copy(file_name, file_copy_path)) {
+        QMessageBox::about(this, "File copying", "File copied.");
+    } else {
+        QMessageBox::about(this, "File copying", "File not copied.");
+    }
+}
+
+void MainWindow::on_actionCopy_Directory_triggered()
+{
+    QString dir_name_from = QFileDialog::getExistingDirectory(this, "Select source directory", "",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QString dir_name_to = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+
+}
+
+void MainWindow::on_actionMove_File_triggered()
+{
+    QString file_name = QFileDialog::getOpenFileName(this, "Select file to move", "");
+    QFile file(file_name);
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QString file_copy_path = QString("%1/%2").arg(dir_name, file.fileName().section("/", -1, -1));
+    if (QFile::exists(file_copy_path)){
+        QFile::remove(file_copy_path);
+    }
+    if (QFile::copy(file_name, file_copy_path)) {
+        if (QFile::remove(file_name)) {
+            QMessageBox::about(this, "File moving", "File moved.");
+        } else {
+            QMessageBox::about(this, "File moving", "File not moved.");
+        }
+    } else {
+        QMessageBox::about(this, "File copying", "File not moved.");
+    }
+}
+
+void MainWindow::on_actionMove_Directory_triggered()
+{
+    QString dir_name_from = QFileDialog::getExistingDirectory(this, "Select source directory", "",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QString dir_name_to = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+}
+
+
+
+void MainWindow::on_copyButton_clicked()
+{
+    QFile file(left_part_path);
+    QFileInfo file_info(file);
+    QFileInfo dir_info(right_part_path);
+    if (file_info.isFile() && dir_info.isDir()) {
+        QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section("/", -1, -1));
+        if (QFile::exists(file_copy_path)){
+            QFile::remove(file_copy_path);
+        }
+        if (QFile::copy(left_part_path, file_copy_path)) {
+            QMessageBox::about(this, "File copying", "File copied.");
+        } else {
+            QMessageBox::about(this, "File copying", "File not copied.");
+        }
+    } else {
+        QMessageBox::about(this, "File copying", "On left window select file, on right directory.");
+    }
+
+}
+
+void MainWindow::on_moveButton_clicked()
+{
+    QFile file(left_part_path);
+    QFileInfo file_info(file);
+    QFileInfo dir_info(right_part_path);
+    if (file_info.isFile() && dir_info.isDir()) {
+        QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section("/", -1, -1));
+        if (QFile::exists(file_copy_path)){
+            QFile::remove(file_copy_path);
+        }
+        if (QFile::copy(left_part_path, file_copy_path)) {
+            if (QFile::remove(left_part_path)) {
+                QMessageBox::about(this, "File moving", "File moved.");
+            } else {
+                QMessageBox::about(this, "File moving", "File not moved.");
+            }
+        } else {
+            QMessageBox::about(this, "File copying", "File not copied.");
+        }
+    } else {
+        QMessageBox::about(this, "File copying", "On left window select file, on right directory.");
+    }
+}
+
+void MainWindow::on_renameButon_clicked()
+{
+     QFile file(left_part_path);
+     QFileInfo file_info(file);
+     QFileInfo dir_info(left_part_path);
+     bool got_text;
+     if (file_info.isFile()) {
+         QString new_file_name = QInputDialog::getText(this, "Renaming file", "Enter new name:", QLineEdit::Normal, "untitled.txt", &got_text);
+         if (got_text && !new_file_name.isEmpty()) {
+             QString new_name = QString("%1/%2").arg(file.fileName().section("/",0,-2), new_file_name);
+             if(file.rename(new_name)) {
+                 QMessageBox::about(this, "File renaming", "File renamed.");
+             } else {
+                 QMessageBox::about(this, "File renaming", "File not renamed.");
+             }
+         } else {
+             QMessageBox::about(this, "File renaming", "File not renamed.");
+         }
+     } else if (dir_info.isDir()) {
+         QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, "untitled", &got_text);
+         if (got_text && !new_dir_name.isEmpty()) {
+             QString new_name = QString("../%1").arg(new_dir_name);
+             QDir directory(left_part_path);
+             if (directory.rename(directory.path(), new_name)) {
+                 QMessageBox::about(this, "Directory renaming", "Directory renamed.");
+             } else {
+                 QMessageBox::about(this, "Directory renaming", "Directory not renamed.");
+             }
+         } else {
+             QMessageBox::about(this, "Directory renaming", "Directory not renamed.");
+         }
+     } else {
+         QMessageBox::about(this, "Renaming", "Only can rename dirs and files.");
+     }
+
+}
+
+void MainWindow::on_deleteButton_clicked()
+{
+    QFile file(left_part_path);
+    QFileInfo file_info(file);
+    QFileInfo dir_info(left_part_path);
+    if (file_info.isFile()) {
+        if (QFile::remove(left_part_path)) {
+            QMessageBox::about(this, "File deleting", "File deleted.");
+        } else {
+            QMessageBox::about(this, "File deleting", "File not deleted.");
+        }
+    } else if (dir_info.isDir()) {
+        QDir directory(left_part_path);
+        if (directory.removeRecursively()) {
+            QMessageBox::about(this, "Directory deleting", "Directory deleted.");
+        } else {
+            QMessageBox::about(this, "Directory deleting", "Directory not deleted.");
+        }
+    } else {
+        QMessageBox::about(this, "Deleting", "Only can delete dirs and files.");
+    }
+}

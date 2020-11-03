@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>800</height>
+    <width>917</width>
+    <height>629</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,19 +15,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="1">
-     <widget class="QTableView" name="tableView_2"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="left_path">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="1">
      <widget class="QLabel" name="right_path">
       <property name="text">
@@ -37,9 +24,6 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QTableView" name="tableView_1"/>
     </item>
     <item row="0" column="0" colspan="2">
      <widget class="QLabel" name="available_storage">
@@ -54,6 +38,50 @@
       </property>
      </widget>
     </item>
+    <item row="3" column="0">
+     <widget class="QPushButton" name="copyButton">
+      <property name="text">
+       <string>Copy</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="left_path">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="moveButton">
+      <property name="text">
+       <string>Move</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QTableView" name="tableView_1"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QTableView" name="tableView_2"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QPushButton" name="renameButon">
+      <property name="text">
+       <string>Rename</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="deleteButton">
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -61,7 +89,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1200</width>
+     <width>917</width>
      <height>22</height>
     </rect>
    </property>
@@ -108,8 +136,24 @@
      <addaction name="actionDelete_File"/>
      <addaction name="actionDelete_Directory"/>
     </widget>
+    <widget class="QMenu" name="menuCopy">
+     <property name="title">
+      <string>Copy</string>
+     </property>
+     <addaction name="actionCopy_File"/>
+     <addaction name="actionCopy_Directory"/>
+    </widget>
+    <widget class="QMenu" name="menuMove">
+     <property name="title">
+      <string>Move</string>
+     </property>
+     <addaction name="actionMove_File"/>
+     <addaction name="actionMove_Directory"/>
+    </widget>
     <addaction name="menuRename"/>
     <addaction name="menuDelete"/>
+    <addaction name="menuCopy"/>
+    <addaction name="menuMove"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -262,10 +306,29 @@
     <string>Delete Directory</string>
    </property>
   </action>
+  <action name="actionCopy_File">
+   <property name="text">
+    <string>Copy File</string>
+   </property>
+  </action>
+  <action name="actionCopy_Directory">
+   <property name="text">
+    <string>Copy Directory</string>
+   </property>
+  </action>
+  <action name="actionMove_File">
+   <property name="text">
+    <string>Move File</string>
+   </property>
+  </action>
+  <action name="actionMove_Directory">
+   <property name="text">
+    <string>Move Directory</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>tableView_1</tabstop>
-  <tabstop>tableView_2</tabstop>
  </tabstops>
  <resources/>
  <connections/>

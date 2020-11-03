@@ -30,15 +30,22 @@ private slots:
     void on_actionZoom_In_triggered();
     void on_actionZoom_Out_triggered();
     void on_actionDefault_Zoom_triggered();
-
-
     void on_actionRename_File_triggered();
-
     void on_actionRename_Directory_triggered();
-
     void on_actionDelete_File_triggered();
-
     void on_actionDelete_Directory_triggered();
+    void on_actionCopy_File_triggered();
+    void on_actionCopy_Directory_triggered();
+    void on_actionMove_File_triggered();
+    void on_actionMove_Directory_triggered();
+
+    void on_copyButton_clicked();
+
+    void on_moveButton_clicked();
+
+    void on_renameButon_clicked();
+
+    void on_deleteButton_clicked();
 
 private:
     Ui::MainWindow *ui;
