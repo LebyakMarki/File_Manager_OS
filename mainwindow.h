@@ -27,12 +27,18 @@ private slots:
     void on_actionAbout_Qt_triggered();
     void on_actionNew_File_triggered();
     void on_actionNew_Folder_triggered();
-
     void on_actionZoom_In_triggered();
-
     void on_actionZoom_Out_triggered();
-
     void on_actionDefault_Zoom_triggered();
+
+
+    void on_actionRename_File_triggered();
+
+    void on_actionRename_Directory_triggered();
+
+    void on_actionDelete_File_triggered();
+
+    void on_actionDelete_Directory_triggered();
 
 private:
     Ui::MainWindow *ui;

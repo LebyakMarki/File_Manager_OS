@@ -74,8 +74,22 @@
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionRename"/>
-    <addaction name="actionDelete"/>
+    <widget class="QMenu" name="menuRename">
+     <property name="title">
+      <string>Rename</string>
+     </property>
+     <addaction name="actionRename_File"/>
+     <addaction name="actionRename_Directory"/>
+    </widget>
+    <widget class="QMenu" name="menuDelete">
+     <property name="title">
+      <string>Delete</string>
+     </property>
+     <addaction name="actionDelete_File"/>
+     <addaction name="actionDelete_Directory"/>
+    </widget>
+    <addaction name="menuRename"/>
+    <addaction name="menuDelete"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -158,24 +172,6 @@
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionRename">
-   <property name="icon">
-    <iconset>
-     <normaloff>icons/Rename_32x32.png</normaloff>icons/Rename_32x32.png</iconset>
-   </property>
-   <property name="text">
-    <string>Rename</string>
-   </property>
-  </action>
-  <action name="actionDelete">
-   <property name="icon">
-    <iconset>
-     <normaloff>icons/Delete_32x32.png</normaloff>icons/Delete_32x32.png</iconset>
-   </property>
-   <property name="text">
-    <string>Delete</string>
-   </property>
-  </action>
   <action name="actionSearch">
    <property name="icon">
     <iconset>
@@ -224,6 +220,26 @@
    </property>
    <property name="text">
     <string>Default Zoom</string>
+   </property>
+  </action>
+  <action name="actionRename_File">
+   <property name="text">
+    <string>Rename File</string>
+   </property>
+  </action>
+  <action name="actionRename_Directory">
+   <property name="text">
+    <string>Rename Directory</string>
+   </property>
+  </action>
+  <action name="actionDelete_File">
+   <property name="text">
+    <string>Delete File</string>
+   </property>
+  </action>
+  <action name="actionDelete_Directory">
+   <property name="text">
+    <string>Delete Directory</string>
    </property>
   </action>
  </widget>

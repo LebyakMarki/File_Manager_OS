@@ -10,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // Setting default application font size
     current_font_size = QApplication::font().pointSize();
+
     // Showing amount of available free space
     QStorageInfo storage = QStorageInfo::root();
     qint64 available_bytes = storage.bytesAvailable()/1000000000;
@@ -41,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_1->verticalHeader()->setVisible(false);
     ui->tableView_2->verticalHeader()->setVisible(false);
 
+    // Removing Line separator
+    ui->tableView_1->setShowGrid(false);
+    ui->tableView_2->setShowGrid(false);
+
 
 }
 
@@ -67,6 +73,8 @@ void MainWindow::on_actionExit_triggered()
     exit_box = QMessageBox::question(this, "Exit procedure", "You want to exit this beautiful file manager?", QMessageBox::No | QMessageBox::Yes);
     if (exit_box != QMessageBox::No) {
         QApplication::instance()->quit();
+    } else {
+        QMessageBox::about(this, "Exit procedure", "Thanks for remaining.");
     }
 }
 
@@ -144,6 +152,66 @@ void MainWindow::on_actionDefault_Zoom_triggered()
 {
     QFont font;
     font.setPointSize(QApplication::font().pointSize());
+    current_font_size = QApplication::font().pointSize();
     ui->tableView_1->setFont(font);
     ui->tableView_2->setFont(font);
+}
+
+
+
+void MainWindow::on_actionRename_File_triggered()
+{
+    QString file_name = QFileDialog::getOpenFileName(this, "Select file to rename", "");
+    QFile file(file_name);
+    bool got_text;
+    QString new_file_name = QInputDialog::getText(this, "Renaming file", "Enter new name:", QLineEdit::Normal, "untitled.txt", &got_text);
+    if (got_text && !new_file_name.isEmpty()) {
+        QString new_name = QString("%1/%2").arg(file.fileName().section("/",0,-2), new_file_name);
+        if(file.rename(new_name)) {
+            QMessageBox::about(this, "File renaming", "File renamed.");
+        } else {
+            QMessageBox::about(this, "File renaming", "File not renamed.");
+        }
+    } else {
+        QMessageBox::about(this, "File renaming", "File not renamed.");
+    }
+}
+
+void MainWindow::on_actionRename_Directory_triggered()
+{
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to rename", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QDir directory(dir_name);
+    bool got_text;
+    QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, "untitled", &got_text);
+    if (got_text && !new_dir_name.isEmpty()) {
+        QString new_name = QString("../%1").arg(new_dir_name);
+        if (directory.rename(directory.path(), new_name)) {
+            QMessageBox::about(this, "Directory renaming", "Directory renamed.");
+        } else {
+            QMessageBox::about(this, "Directory renaming", "Directory not renamed.");
+        }
+    } else {
+        QMessageBox::about(this, "Directory renaming", "Directory not renamed.");
+    }
+}
+
+void MainWindow::on_actionDelete_File_triggered()
+{
+    QString file_name = QFileDialog::getOpenFileName(this, "Select file to rename", "");
+    if (QFile::remove(file_name)) {
+        QMessageBox::about(this, "File deleting", "File deleted.");
+    } else {
+        QMessageBox::about(this, "File deleting", "File not deleted.");
+    }
+}
+
+void MainWindow::on_actionDelete_Directory_triggered()
+{
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to delete", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QDir directory(dir_name);
+    if (directory.removeRecursively()) {
+        QMessageBox::about(this, "Directory deleting", "Directory deleted.");
+    } else {
+        QMessageBox::about(this, "Directory deleting", "Directory not deleted.");
+    }
 }
