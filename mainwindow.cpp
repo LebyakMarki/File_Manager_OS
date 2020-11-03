@@ -15,8 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Showing amount of available free space
     QStorageInfo storage = QStorageInfo::root();
-    qint64 available_bytes = storage.bytesAvailable()/1000000000;
-    qint64 total_bytes = storage.bytesTotal()/1000000000;
+    qint64 available_bytes = storage.bytesAvailable()/1024/1024/1024;
+    qint64 total_bytes = storage.bytesTotal()/1024/1024/1024;
     qint8 available_percent = available_bytes * 100 / total_bytes;
     QString storage_name = storage.fileSystemType();
     QString storage_info = QString("%1 GiB available out of %2 GiB (%3%) on [%4]").arg(QString::number(available_bytes), QString::number(total_bytes),
