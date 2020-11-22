@@ -8,6 +8,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , searchDialog(new SearchDialog)
 {
     ui->setupUi(this);
     // Setting default application font size
@@ -65,7 +66,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_tableView_1_clicked(const QModelIndex &index)
 {
+    right_main = false;
     QString sPath = dirmodel_1->fileInfo(index).absoluteFilePath();
+    if (sPath == "/..") {
+        return;
+    }
+    ui->left_path->setText(sPath);
+    left_part_path = sPath;
+}
+
+void MainWindow::on_tableView_1_doubleClicked(const QModelIndex &index)
+{
+    right_main = false;
+    QString sPath = dirmodel_1->fileInfo(index).absoluteFilePath();
+    if (sPath == "/..") {
+        return;
+    }
     ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(sPath));
     ui->left_path->setText(sPath);
     left_part_path = sPath;
@@ -73,7 +89,22 @@ void MainWindow::on_tableView_1_clicked(const QModelIndex &index)
 
 void MainWindow::on_tableView_2_clicked(const QModelIndex &index)
 {
+    right_main = true;
     QString sPath = dirmodel_2->fileInfo(index).absoluteFilePath();
+    if (sPath == "/..") {
+        return;
+    }
+    ui->right_path->setText(sPath);
+    right_part_path = sPath;
+}
+
+void MainWindow::on_tableView_2_doubleClicked(const QModelIndex &index)
+{
+    right_main = true;
+    QString sPath = dirmodel_2->fileInfo(index).absoluteFilePath();
+    if (sPath == "/..") {
+        return;
+    }
     ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(sPath));
     ui->right_path->setText(sPath);
     right_part_path = sPath;
@@ -389,4 +420,10 @@ void MainWindow::on_deleteButton_clicked()
     } else {
         QMessageBox::about(this, "Deleting", "Only can delete dirs and files.");
     }
+}
+
+void MainWindow::on_actionSearch_triggered()
+{
+    searchDialog->show();
+    searchDialog->activateWindow();
 }

@@ -5,6 +5,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <QFileSystemModel>
+#include "searchdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,6 +22,8 @@ public:
 private slots:
     void on_tableView_2_clicked(const QModelIndex &index);
     void on_tableView_1_clicked(const QModelIndex &index);
+    void on_tableView_1_doubleClicked(const QModelIndex &index);
+    void on_tableView_2_doubleClicked(const QModelIndex &index);
     void on_actionExit_triggered();
     void on_actionAbout_file_manager_triggered();
     void on_actionTeam_triggered();
@@ -38,14 +41,12 @@ private slots:
     void on_actionCopy_Directory_triggered();
     void on_actionMove_File_triggered();
     void on_actionMove_Directory_triggered();
-
     void on_copyButton_clicked();
-
     void on_moveButton_clicked();
-
     void on_renameButon_clicked();
-
     void on_deleteButton_clicked();
+
+    void on_actionSearch_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -54,5 +55,7 @@ private:
     QString right_part_path;
     QString left_part_path;
     int8_t current_font_size;
+    bool right_main;
+    QScopedPointer<SearchDialog> searchDialog;
 };
 #endif // MAINWINDOW_H
