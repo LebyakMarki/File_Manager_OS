@@ -15,6 +15,16 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0">
+     <widget class="QLabel" name="left_path">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="1">
      <widget class="QLabel" name="right_path">
       <property name="text">
@@ -24,6 +34,72 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QTableView" name="tableView_1"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QTableView" name="tableView_2"/>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="renameButon">
+        <property name="text">
+         <string>F2 Rename</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="editButton">
+        <property name="text">
+         <string>F3 Edit</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="copyButton">
+        <property name="text">
+         <string>F4 Copy</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="moveButton">
+        <property name="text">
+         <string>F5 Move</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="newFileButton">
+        <property name="text">
+         <string>F6 New File</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="newDirButton">
+        <property name="text">
+         <string>F7 New Dir</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="deleteButton">
+        <property name="text">
+         <string>F8 Delete</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="quitButton">
+        <property name="text">
+         <string>F9 Quit</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item row="0" column="0" colspan="2">
      <widget class="QLabel" name="available_storage">
@@ -35,50 +111,6 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QPushButton" name="copyButton">
-      <property name="text">
-       <string>Copy</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="left_path">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QPushButton" name="moveButton">
-      <property name="text">
-       <string>Move</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QTableView" name="tableView_1"/>
-    </item>
-    <item row="2" column="1">
-     <widget class="QTableView" name="tableView_2"/>
-    </item>
-    <item row="4" column="0">
-     <widget class="QPushButton" name="renameButon">
-      <property name="text">
-       <string>Rename</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QPushButton" name="deleteButton">
-      <property name="text">
-       <string>Delete</string>
       </property>
      </widget>
     </item>
