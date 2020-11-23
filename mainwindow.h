@@ -57,6 +57,8 @@ private slots:
 
     void on_viewButton_clicked();
 
+    void on_actionShow_in_Terminal_triggered();
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirmodel_1;

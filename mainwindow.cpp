@@ -50,6 +50,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_1->setShowGrid(false);
     ui->tableView_2->setShowGrid(false);
 
+    // Different colors for lines
+    ui->tableView_1->setAlternatingRowColors(true);
+    ui->tableView_2->setAlternatingRowColors(true);
+
     // Setting paths
     right_part_path = startPath;
     left_part_path = startPath;
@@ -473,4 +477,22 @@ void MainWindow::on_viewButton_clicked()
                                                                                                                            get_file_permission(info));
     msgBox.setText(file_info_text);
     msgBox.exec();
+}
+
+void MainWindow::on_actionShow_in_Terminal_triggered()
+{
+    QString file_path;
+    if (right_main) {
+        file_path = right_part_path;
+    } else {
+        file_path = left_part_path;}
+    QProcess* proc = new QProcess(this);
+    proc->setWorkingDirectory(file_path);
+#ifdef __APPLE__
+    proc->setProgram("/Applications/Utilities/Terminal.app");
+#else
+    proc->setProgram("/usr/bin/gnome-terminal");
+#endif
+    proc->start();
+    proc->waitForStarted();
 }
