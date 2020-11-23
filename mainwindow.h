@@ -7,6 +7,7 @@
 #include <QFileSystemModel>
 #include "searchdialog.h"
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -47,6 +48,14 @@ private slots:
     void on_deleteButton_clicked();
 
     void on_actionSearch_triggered();
+
+    void on_actionExtract_triggered();
+
+    void on_actionExtract_to_triggered();
+
+    void on_actionZip_triggered();
+
+    void on_viewButton_clicked();
 
 private:
     Ui::MainWindow *ui;

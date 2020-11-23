@@ -3,7 +3,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QFileDialog>
-
+#include "file_info_functions.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -29,12 +29,14 @@ MainWindow::MainWindow(QWidget *parent)
     QString startPath = QDir::homePath();
     dirmodel_1= new QFileSystemModel(this);
     dirmodel_2= new QFileSystemModel(this);
-    dirmodel_1->setFilter(QDir::AllEntries | QDir::NoDot);
-    dirmodel_1->setRootPath(startPath);
-    dirmodel_2->setFilter(QDir::AllEntries | QDir::NoDot);
-    dirmodel_2->setRootPath(startPath);
     ui->tableView_1->setModel(dirmodel_1);
     ui->tableView_2->setModel(dirmodel_2);
+    dirmodel_1->setRootPath(startPath);
+    dirmodel_2->setRootPath(startPath);
+    dirmodel_1->setFilter(QDir::AllEntries | QDir::NoDot);
+    dirmodel_2->setFilter(QDir::AllEntries | QDir::NoDot);
+    ui->tableView_1->setRootIndex(dirmodel_1->index(startPath));
+    ui->tableView_2->setRootIndex(dirmodel_2->index(startPath));
 
     // Set resizing options for two table views
     ui->tableView_1->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -426,4 +428,49 @@ void MainWindow::on_actionSearch_triggered()
 {
     searchDialog->show();
     searchDialog->activateWindow();
+}
+
+void MainWindow::on_actionExtract_triggered()
+{
+
+}
+
+void MainWindow::on_actionExtract_to_triggered()
+{
+
+}
+
+void MainWindow::on_actionZip_triggered()
+{
+    QFile file(left_part_path);
+    QFileInfo file_info(file);
+    QFileInfo dir_info(left_part_path);
+    if (file_info.isFile()) {
+
+    } else if (dir_info.isDir()) {
+
+    } else {
+        QMessageBox::about(this, "Zipping", "Only can zip dirs and files.");
+    }
+}
+
+
+void MainWindow::on_viewButton_clicked()
+{
+    QString file_path;
+    if (right_main) {
+        file_path = right_part_path;
+    } else {
+        file_path = left_part_path;}
+    QFileInfo info(file_path);
+    QString last_modified = info.lastModified().toString();
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("File info");
+    QString file_info_text = QString("File name: %1\nType: %2\nParent folder: %3\nLast modified: %4\nPermissions: %5").arg(info.fileName(),
+                                                                                                                           get_file_type(info),
+                                                                                                                           info.canonicalPath(),
+                                                                                                                           last_modified,
+                                                                                                                           get_file_permission(info));
+    msgBox.setText(file_info_text);
+    msgBox.exec();
 }

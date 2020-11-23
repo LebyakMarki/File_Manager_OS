@@ -58,44 +58,51 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="viewButton">
+        <property name="text">
+         <string>F4 View</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="copyButton">
         <property name="text">
-         <string>F4 Copy</string>
+         <string>F5 Copy</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="moveButton">
         <property name="text">
-         <string>F5 Move</string>
+         <string>F6 Move</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="newFileButton">
         <property name="text">
-         <string>F6 New File</string>
+         <string>F7 New File</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="newDirButton">
         <property name="text">
-         <string>F7 New Dir</string>
+         <string>F8 New Dir</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="deleteButton">
         <property name="text">
-         <string>F8 Delete</string>
+         <string>F9 Delete</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="quitButton">
         <property name="text">
-         <string>F9 Quit</string>
+         <string>F10 Quit</string>
         </property>
        </widget>
       </item>
@@ -148,6 +155,8 @@
     <addaction name="actionNew_File"/>
     <addaction name="actionNew_Folder"/>
     <addaction name="actionZip"/>
+    <addaction name="actionExtract"/>
+    <addaction name="actionExtract_to"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -356,6 +365,16 @@
   <action name="actionMove_Directory">
    <property name="text">
     <string>Move Directory</string>
+   </property>
+  </action>
+  <action name="actionExtract">
+   <property name="text">
+    <string>Extract</string>
+   </property>
+  </action>
+  <action name="actionExtract_to">
+   <property name="text">
+    <string>Extract to</string>
    </property>
   </action>
  </widget>
