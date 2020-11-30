@@ -287,6 +287,25 @@ void MainWindow::on_actionCopy_File_triggered()
     }
 }
 
+void MainWindow::copyDir(QString &from, QString &to) {
+    QDir from_dir(from);
+    QDir to_dir(to);
+
+    if (!to_dir.exists()) {
+        to_dir.mkdir(to);
+    }
+    foreach (const QString &file, from_dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
+        QString fromDirName = from + QDir::separator() + file;
+        QString toDirName = to + QDir::separator() + file;
+        copyDir(fromDirName, toDirName);
+    }
+    foreach (const QString &file, from_dir.entryList(QDir::Files)) {
+        QString fromDirName = from + QDir::separator() + file;
+        QString toDirName = to + QDir::separator() + file;
+        QFile::copy(fromDirName, toDirName);
+    }
+}
+
 void MainWindow::on_actionCopy_Directory_triggered()
 {
     QString dir_name_from = QFileDialog::getExistingDirectory(this, "Select source directory", "",
@@ -294,6 +313,13 @@ void MainWindow::on_actionCopy_Directory_triggered()
     QString dir_name_to = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
+    QDir from_dir(dir_name_from);
+    QString to_fullpath = dir_name_to + QDir::separator() + from_dir.dirName();
+    QDir to_dir(to_fullpath);
+    if (!to_dir.exists()) {
+        to_dir.mkdir(to_fullpath);
+    }
+    copyDir(dir_name_from, to_fullpath);
 }
 
 void MainWindow::on_actionMove_File_triggered()
@@ -315,12 +341,25 @@ void MainWindow::on_actionMove_File_triggered()
     }
 }
 
+
 void MainWindow::on_actionMove_Directory_triggered()
 {
     QString dir_name_from = QFileDialog::getExistingDirectory(this, "Select source directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     QString dir_name_to = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QDir from_dir(dir_name_from);
+    QString to_fullpath = dir_name_to + QDir::separator() + from_dir.dirName();
+    QDir to_dir(to_fullpath);
+    if (!to_dir.exists()) {
+        to_dir.mkdir(to_fullpath);
+    }
+    copyDir(dir_name_from, to_fullpath);
+    if (from_dir.removeRecursively()) {
+        return;
+    } else {
+        QMessageBox::about(this, "Directory deleting", "Source directory not deleted.");
+    }
 }
 
 
@@ -340,6 +379,14 @@ void MainWindow::on_copyButton_clicked()
         } else {
             QMessageBox::about(this, "File copying", "Something bad happened.");
         }
+    } else if (file_info.isDir() && dir_info.isDir()){
+        QDir from_dir(left_part_path);
+        QString to_fullpath = right_part_path + QDir::separator() + from_dir.dirName();
+        QDir to_dir(to_fullpath);
+        if (!to_dir.exists()) {
+            to_dir.mkdir(to_fullpath);
+        }
+        copyDir(left_part_path, to_fullpath);
     }
 }
 
@@ -359,6 +406,19 @@ void MainWindow::on_moveButton_clicked()
             } else {
                 QMessageBox::about(this, "File moving", "Something bad happened.");
             }
+        }
+    } else if (file_info.isDir() && dir_info.isDir()){
+        QDir from_dir(left_part_path);
+        QString to_fullpath = right_part_path + QDir::separator() + from_dir.dirName();
+        QDir to_dir(to_fullpath);
+        if (!to_dir.exists()) {
+            to_dir.mkdir(to_fullpath);
+        }
+        copyDir(left_part_path, to_fullpath);
+        if (from_dir.removeRecursively()) {
+            return;
+        } else {
+            QMessageBox::about(this, "Directory deleting", "Source directory not deleted.");
         }
     }
 }
