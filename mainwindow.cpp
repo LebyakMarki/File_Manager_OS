@@ -154,7 +154,6 @@ void MainWindow::on_actionNew_File_triggered()
     if (!file.exists()) {
         file.open(QIODevice::ReadWrite);
         file.close();
-        QMessageBox::about(this, "File creation", "File created successfully.");
     } else {
         QMessageBox::about(this, "File creation", "File already exists.");
     }
@@ -169,12 +168,10 @@ void MainWindow::on_actionNew_Folder_triggered()
     if (got_text && !new_dir_name.isEmpty()) {
         if (!directory.exists(new_dir_name)) {
             directory.mkdir(new_dir_name);
-            QMessageBox::about(this, "Directory creation", "Directory created successfully.");
+            return;
         } else {
             QMessageBox::about(this, "Directory creation", "Directory already exists.");
         }
-    } else {
-        QMessageBox::about(this, "Directory creation", "Directory not created.");
     }
 }
 
@@ -211,17 +208,16 @@ void MainWindow::on_actionRename_File_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Select file to rename", "");
     QFile file(file_name);
+    QFileInfo file_info(file_name);
     bool got_text;
-    QString new_file_name = QInputDialog::getText(this, "Renaming file", "Enter new name:", QLineEdit::Normal, "untitled.txt", &got_text);
+    QString new_file_name = QInputDialog::getText(this, "Renaming file", "Enter new name:", QLineEdit::Normal, file_info.fileName(), &got_text);
     if (got_text && !new_file_name.isEmpty()) {
         QString new_name = QString("%1/%2").arg(file.fileName().section("/",0,-2), new_file_name);
         if(file.rename(new_name)) {
-            QMessageBox::about(this, "File renaming", "File renamed.");
+            return;
         } else {
             QMessageBox::about(this, "File renaming", "File not renamed.");
         }
-    } else {
-        QMessageBox::about(this, "File renaming", "File not renamed.");
     }
 }
 
@@ -230,26 +226,30 @@ void MainWindow::on_actionRename_Directory_triggered()
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to rename", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     QDir directory(dir_name);
     bool got_text;
-    QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, "untitled", &got_text);
+    QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, directory.dirName(), &got_text);
     if (got_text && !new_dir_name.isEmpty()) {
         QString new_name = QString("../%1").arg(new_dir_name);
         if (directory.rename(directory.path(), new_name)) {
-            QMessageBox::about(this, "Directory renaming", "Directory renamed.");
+            return;
         } else {
             QMessageBox::about(this, "Directory renaming", "Directory not renamed.");
         }
-    } else {
-        QMessageBox::about(this, "Directory renaming", "Directory not renamed.");
     }
 }
 
 void MainWindow::on_actionDelete_File_triggered()
 {
-    QString file_name = QFileDialog::getOpenFileName(this, "Select file to rename", "");
-    if (QFile::remove(file_name)) {
-        QMessageBox::about(this, "File deleting", "File deleted.");
-    } else {
-        QMessageBox::about(this, "File deleting", "File not deleted.");
+    QString file_name = QFileDialog::getOpenFileName(this, "Select file to remove", "");
+    QFileInfo file_info(file_name);
+    QMessageBox::StandardButton delete_box;
+    delete_box = QMessageBox::question(this, "Delete procedure", QString("You want to delete %1?").arg(file_info.fileName()),
+                                       QMessageBox::No | QMessageBox::Yes);
+    if (delete_box != QMessageBox::No) {
+        if (QFile::remove(file_name)) {
+            return;
+        } else {
+            QMessageBox::about(this, "File deleting", "File not deleted.");
+        }
     }
 }
 
@@ -257,10 +257,15 @@ void MainWindow::on_actionDelete_Directory_triggered()
 {
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to delete", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     QDir directory(dir_name);
-    if (directory.removeRecursively()) {
-        QMessageBox::about(this, "Directory deleting", "Directory deleted.");
-    } else {
-        QMessageBox::about(this, "Directory deleting", "Directory not deleted.");
+    QMessageBox::StandardButton delete_box;
+    delete_box = QMessageBox::question(this, "Delete procedure", QString("You want to delete %1?").arg(directory.dirName()),
+                                       QMessageBox::No | QMessageBox::Yes);
+    if (delete_box != QMessageBox::No) {
+        if (directory.removeRecursively()) {
+            return;
+        } else {
+            QMessageBox::about(this, "Directory deleting", "Directory not deleted.");
+        }
     }
 }
 
@@ -276,7 +281,7 @@ void MainWindow::on_actionCopy_File_triggered()
         QFile::remove(file_copy_path);
     }
     if (QFile::copy(file_name, file_copy_path)) {
-        QMessageBox::about(this, "File copying", "File copied.");
+        return;
     } else {
         QMessageBox::about(this, "File copying", "File not copied.");
     }
@@ -303,12 +308,10 @@ void MainWindow::on_actionMove_File_triggered()
     }
     if (QFile::copy(file_name, file_copy_path)) {
         if (QFile::remove(file_name)) {
-            QMessageBox::about(this, "File moving", "File moved.");
+            return;
         } else {
             QMessageBox::about(this, "File moving", "File not moved.");
         }
-    } else {
-        QMessageBox::about(this, "File copying", "File not moved.");
     }
 }
 
