@@ -59,6 +59,8 @@ private slots:
 
     void on_actionShow_in_Terminal_triggered();
 
+    void on_editButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirmodel_1;
@@ -67,6 +69,7 @@ private:
     QString left_part_path;
     int8_t current_font_size;
     bool right_main;
+    QUrl currUrl;
     QScopedPointer<SearchDialog> searchDialog;
 };
 #endif // MAINWINDOW_H

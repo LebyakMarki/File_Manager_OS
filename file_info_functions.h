@@ -7,6 +7,7 @@
 #include <QtGui>
 #include <QFileSystemModel>
 
+
 QString get_file_permission(QFileInfo &info) {
     QString result;
     if (info.permission(QFile::ReadOwner)) {

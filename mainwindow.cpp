@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QFileDialog>
+#include <QFile>
 #include "file_info_functions.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -39,8 +40,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_2->setRootIndex(dirmodel_2->index(startPath));
 
     // Set resizing options for two table views
-    ui->tableView_1->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->tableView_2->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableView_1->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->tableView_2->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
     // Ignoring table numbers
     ui->tableView_1->verticalHeader()->setVisible(false);
@@ -495,4 +496,15 @@ void MainWindow::on_actionShow_in_Terminal_triggered()
 #endif
     proc->start();
     proc->waitForStarted();
+}
+
+void MainWindow::on_editButton_clicked()
+{
+    QString file_path;
+    if (right_main) {
+        file_path = right_part_path;
+    } else {
+        file_path = left_part_path;}
+    currUrl = QUrl::fromLocalFile(QFileInfo(file_path).absoluteFilePath());
+    QDesktopServices::openUrl(currUrl);
 }
