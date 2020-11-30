@@ -61,6 +61,12 @@ private slots:
 
     void on_editButton_clicked();
 
+    void on_newFileButton_clicked();
+
+    void on_newDirButton_clicked();
+
+    void on_quitButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirmodel_1;
