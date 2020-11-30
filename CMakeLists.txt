@@ -14,9 +14,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(LibArchive REQUIRED)
-find_package(QuaZip5)
+
 include_directories(${LibArchive_INCLUDE_DIRS})
-include_directories(${QUAZIP_INCLUDE_DIRS})
+
 
 set(images_resources images.qrc)
 qt5_add_resources(images_resources_rcc ${images_resources})
@@ -28,9 +28,10 @@ add_executable(File_Manager
     mainwindow.ui
     searchdialog.cpp
     searchdialog.h
+    archives.h
     searchdialog.ui
     file_info_functions.h
     ${images_resources_rcc}
 )
 
-target_link_libraries(File_Manager PRIVATE Qt5::Widgets ${LibArchive_LIBRARIES} ${QUAZIP_LIBRARIES})
+target_link_libraries(File_Manager PRIVATE Qt5::Widgets ${LibArchive_LIBRARIES})

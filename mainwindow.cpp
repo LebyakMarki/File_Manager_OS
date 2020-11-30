@@ -5,6 +5,10 @@
 #include <QFileDialog>
 #include <QFile>
 #include "file_info_functions.h"
+#include "archives.h"
+#include <archive.h>
+#include <archive_entry.h>
+#include <string.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -507,26 +511,22 @@ void MainWindow::on_actionSearch_triggered()
 
 void MainWindow::on_actionExtract_triggered()
 {
-
+    QString file_name = QFileDialog::getOpenFileName(this, "Select archive to unzip", "");
+    QFileInfo file_info(file_name);
+    extract(file_name, file_info.absolutePath() + QDir::separator());
 }
 
 void MainWindow::on_actionExtract_to_triggered()
 {
-
+    QString file_name = QFileDialog::getOpenFileName(this, "Select archive to unzip", "");
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    extract(file_name, dir_name + QDir::separator());
 }
 
 void MainWindow::on_actionZip_triggered()
 {
-    QFile file(left_part_path);
-    QFileInfo file_info(file);
-    QFileInfo dir_info(left_part_path);
-    if (file_info.isFile()) {
 
-    } else if (dir_info.isDir()) {
-
-    } else {
-        QMessageBox::about(this, "Zipping", "Only can zip dirs and files.");
-    }
 }
 
 
