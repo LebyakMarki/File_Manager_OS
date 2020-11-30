@@ -24,7 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
     QString storage_info = QString("%1 GiB available out of %2 GiB (%3%) on [%4]").arg(QString::number(available_bytes), QString::number(total_bytes),
                                                                                        QString::number(available_percent), QString(storage_name));
     ui->available_storage->setText(storage_info);
-    ui->available_storage->setStyleSheet("QLabel { background-color : white; }");
+    ui->available_storage->setAlignment(Qt::AlignCenter);
+    ui->available_storage->setEnabled(false);
+
 
     // Setting up models and initial path for them
     QString startPath = QDir::homePath();
@@ -62,8 +64,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Showing paths
     ui->left_path->setText(startPath);
     ui->right_path->setText(startPath);
-    ui->left_path->setStyleSheet("QLabel { background-color : white; }");
-    ui->right_path->setStyleSheet("QLabel { background-color : white; }");
+    ui->right_path->setAlignment(Qt::AlignCenter);
+    ui->left_path->setAlignment(Qt::AlignCenter);
 }
 
 MainWindow::~MainWindow()
@@ -626,3 +628,36 @@ void MainWindow::on_quitButton_clicked()
         QApplication::instance()->quit();
     }
 }
+
+
+
+void MainWindow::on_left_path_returnPressed()
+{
+    QString current_path = ui->left_path->text();
+    right_main = false;
+    QDir dir(current_path);
+    if (dir.exists()) {
+        ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(current_path));
+        ui->left_path->setText(current_path);
+        left_part_path = current_path;
+    }
+}
+
+
+void MainWindow::on_right_path_returnPressed()
+{
+    QString current_path = ui->right_path->text();
+    right_main = true;
+    QDir dir(current_path);
+    if (dir.exists()) {
+        ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(current_path));
+        ui->right_path->setText(current_path);
+        right_part_path = current_path;
+    }
+}
+
+
+
+
+
+

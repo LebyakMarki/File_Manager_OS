@@ -58,6 +58,11 @@ private slots:
     void on_quitButton_clicked();
     void copyDir(QString &from, QString &to);
 
+
+    void on_left_path_returnPressed();
+
+    void on_right_path_returnPressed();
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirmodel_1;

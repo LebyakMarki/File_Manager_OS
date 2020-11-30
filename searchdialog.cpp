@@ -79,11 +79,13 @@ void SearchDialog::on_start_searching_button_clicked()
     if (filenameSearch == "" || filenameSearch.isEmpty()) {
         return;
     } else {
+        ui->fileNameBox->addItem(filenameSearch);
         filter << "*" + filenameSearch + "*";
     }
     QString textSearch = ui->containing_text_box->currentText();
     QStringList foundFiles;
     QString type = ui->fileTypeBox->currentText();
+
     if (browsePaths.isEmpty()) {
         QString homeDir = QDir::homePath();
         QString path = QDir::cleanPath(homeDir);
@@ -126,6 +128,7 @@ void SearchDialog::on_start_searching_button_clicked()
     }
     if (textSearch != "" && !textSearch.isEmpty()) {
         foundFiles = findFilesByText(foundFiles, textSearch, ui->caseSensitiveContainingTextBox->isChecked());
+        ui->containing_text_box->addItem(textSearch);
     }
     foundFiles.toSet().toList();
     QSet<QString> setFiles = QSet<QString>::fromList(foundFiles);
