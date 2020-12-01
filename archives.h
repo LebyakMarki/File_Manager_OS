@@ -3,7 +3,6 @@
 
 #endif // ARCHIVES_H
 
-
 #include <archive.h>
 #include <archive_entry.h>
 #include <QMainWindow>
@@ -17,6 +16,47 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+void archive_folder(const QString& arhive_name, const QString& filename) {
+    struct archive *a;
+    struct archive_entry *entry;
+    struct stat st;
+    const char *fileName = filename.toStdString().c_str();
+    char buf[8192];
+    int len;
+    int fd;
+
+    a = archive_write_new();
+    archive_write_add_filter_compress(a);
+    archive_write_set_format_ustar(a);
+    archive_write_open_filename(a, arhive_name.toStdString().c_str());
+
+    struct archive *disk = archive_read_disk_new();
+    archive_read_disk_set_standard_lookup(disk);
+    archive_read_disk_open(disk, fileName);
+
+    entry = archive_entry_new();
+    archive_entry_set_pathname(entry, fileName);
+    archive_read_next_header2(disk, entry);
+
+    archive_entry_set_filetype(entry, AE_IFREG);
+
+    if (archive_write_header(a, entry) > ARCHIVE_FATAL) {
+        fd = open(archive_entry_sourcepath(entry), O_RDONLY);
+        len = read(fd, buf, sizeof(buf));
+        while (len > 0) {
+            archive_write_data(a, buf, len);
+            len = read(fd, buf, sizeof(buf));
+        }
+        close(fd);
+    } else {
+        return;
+    }
+    archive_entry_free(entry);
+    archive_write_close(a);
+    archive_write_free(a);
+    return;
+}
 
 
 int copy_data(struct archive *ar, struct archive *aw) {

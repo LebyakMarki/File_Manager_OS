@@ -526,7 +526,14 @@ void MainWindow::on_actionExtract_to_triggered()
 
 void MainWindow::on_actionZip_triggered()
 {
-
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to compress", "",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QDir dir(dir_name);
+    bool got_text;
+    QString archive_name = QInputDialog::getText(this, "Compressing file", "Enter new name:", QLineEdit::Normal, dir.dirName() + ".zip", &got_text);
+    if (got_text) {
+        archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, dir_name);
+    }
 }
 
 
