@@ -524,18 +524,6 @@ void MainWindow::on_actionExtract_to_triggered()
     extract(file_name, dir_name + QDir::separator());
 }
 
-void MainWindow::on_actionZip_triggered()
-{
-    QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to compress", "",
-                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    QDir dir(dir_name);
-    bool got_text;
-    QString archive_name = QInputDialog::getText(this, "Compressing file", "Enter new name:", QLineEdit::Normal, dir.dirName() + ".zip", &got_text);
-    if (got_text) {
-        archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, dir_name);
-    }
-}
-
 
 void MainWindow::on_viewButton_clicked()
 {
@@ -662,6 +650,43 @@ void MainWindow::on_right_path_returnPressed()
         right_part_path = current_path;
     }
 }
+
+
+void MainWindow::on_actionZip_Directory_triggered()
+{
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to compress", "",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QDir dir(dir_name);
+    bool got_text;
+    QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
+                                                 dir.dirName() + ".zip", &got_text);
+    if (got_text) {
+        archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
+    }
+}
+
+void MainWindow::on_actionZip_File_triggered()
+{
+    QString file_name = QFileDialog::getOpenFileName(this, "Select file/directory to zip", "");
+    QFile file(file_name);
+    QFileInfo file_info(file);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

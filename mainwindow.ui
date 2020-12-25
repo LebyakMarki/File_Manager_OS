@@ -128,9 +128,16 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuZip">
+     <property name="title">
+      <string>Zip</string>
+     </property>
+     <addaction name="actionZip_File"/>
+     <addaction name="actionZip_Directory"/>
+    </widget>
     <addaction name="actionNew_File"/>
     <addaction name="actionNew_Folder"/>
-    <addaction name="actionZip"/>
+    <addaction name="menuZip"/>
     <addaction name="actionExtract"/>
     <addaction name="actionExtract_to"/>
     <addaction name="actionExit"/>
@@ -221,15 +228,6 @@
    </property>
    <property name="text">
     <string>New Folder</string>
-   </property>
-  </action>
-  <action name="actionZip">
-   <property name="icon">
-    <iconset>
-     <normaloff>icons/Archive_32x32.png</normaloff>icons/Archive_32x32.png</iconset>
-   </property>
-   <property name="text">
-    <string>Zip</string>
    </property>
   </action>
   <action name="actionNew_Window">
@@ -351,6 +349,16 @@
   <action name="actionExtract_to">
    <property name="text">
     <string>Extract to</string>
+   </property>
+  </action>
+  <action name="actionZip_File">
+   <property name="text">
+    <string>Zip File</string>
+   </property>
+  </action>
+  <action name="actionZip_Directory">
+   <property name="text">
+    <string>Zip Directory</string>
    </property>
   </action>
  </widget>

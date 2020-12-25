@@ -49,7 +49,6 @@ private slots:
     void on_actionSearch_triggered();
     void on_actionExtract_triggered();
     void on_actionExtract_to_triggered();
-    void on_actionZip_triggered();
     void on_viewButton_clicked();
     void on_actionShow_in_Terminal_triggered();
     void on_editButton_clicked();
@@ -57,11 +56,10 @@ private slots:
     void on_newDirButton_clicked();
     void on_quitButton_clicked();
     void copyDir(QString &from, QString &to);
-
-
     void on_left_path_returnPressed();
-
     void on_right_path_returnPressed();
+    void on_actionZip_Directory_triggered();
+    void on_actionZip_File_triggered();
 
 private:
     Ui::MainWindow *ui;
