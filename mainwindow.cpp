@@ -654,7 +654,7 @@ void MainWindow::on_right_path_returnPressed()
 
 void MainWindow::on_actionZip_Directory_triggered()
 {
-    QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to compress", "",
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to zip", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     QDir dir(dir_name);
     bool got_text;
@@ -667,9 +667,15 @@ void MainWindow::on_actionZip_Directory_triggered()
 
 void MainWindow::on_actionZip_File_triggered()
 {
-    QString file_name = QFileDialog::getOpenFileName(this, "Select file/directory to zip", "");
+    QString file_name = QFileDialog::getOpenFileName(this, "Select fileto zip", "");
     QFile file(file_name);
     QFileInfo file_info(file);
+    bool got_text;
+    QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
+                                                 file_info.fileName() + ".zip", &got_text);
+    if (got_text) {
+         archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_name);
+    }
 }
 
 
