@@ -56,10 +56,10 @@ private slots:
     void on_newDirButton_clicked();
     void on_quitButton_clicked();
     void copyDir(QString &from, QString &to);
-    void on_left_path_returnPressed();
-    void on_right_path_returnPressed();
     void on_actionZip_Directory_triggered();
     void on_actionZip_File_triggered();
+    void on_left_path_editingFinished();
+    void on_right_path_editingFinished();
 
 private:
     Ui::MainWindow *ui;

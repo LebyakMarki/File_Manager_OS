@@ -695,33 +695,6 @@ void MainWindow::on_quitButton_clicked()
 }
 
 
-
-void MainWindow::on_left_path_returnPressed()
-{
-    QString current_path = ui->left_path->text();
-    right_main = false;
-    QDir dir(current_path);
-    if (dir.exists()) {
-        ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(current_path));
-        ui->left_path->setText(current_path);
-        left_part_path = current_path;
-    }
-}
-
-
-void MainWindow::on_right_path_returnPressed()
-{
-    QString current_path = ui->right_path->text();
-    right_main = true;
-    QDir dir(current_path);
-    if (dir.exists()) {
-        ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(current_path));
-        ui->right_path->setText(current_path);
-        right_part_path = current_path;
-    }
-}
-
-
 void MainWindow::on_actionZip_Directory_triggered()
 {
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to zip", "",
@@ -749,23 +722,26 @@ void MainWindow::on_actionZip_File_triggered()
 }
 
 
+void MainWindow::on_left_path_editingFinished()
+{
+    QString current_path = ui->left_path->text();
+    right_main = false;
+    QDir dir(current_path);
+    if (dir.exists()) {
+        ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(current_path));
+        ui->left_path->setText(current_path);
+        left_part_path = current_path;
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void MainWindow::on_right_path_editingFinished()
+{
+    QString current_path = ui->right_path->text();
+    right_main = true;
+    QDir dir(current_path);
+    if (dir.exists()) {
+        ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(current_path));
+        ui->right_path->setText(current_path);
+        right_part_path = current_path;
+    }
+}
