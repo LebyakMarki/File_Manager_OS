@@ -163,8 +163,7 @@ void MainWindow::on_actionNew_File_triggered()
     QFileDialog file_dialog;
     file_dialog.setFileMode(QFileDialog::AnyFile);
     QString file_name = file_dialog.getSaveFileName(this, "Creating file", "untitled.txt", "");
-    if (file_name.isEmpty()) {
-         QMessageBox::about(this, "File creation", "File not created.");
+    if (file_name.isEmpty() && file_name.isNull()) {
          return;
     }
     QFile file(file_name);
@@ -179,6 +178,9 @@ void MainWindow::on_actionNew_File_triggered()
 void MainWindow::on_actionNew_Folder_triggered()
 {
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select parent directory", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name.isEmpty() && dir_name.isNull()) {
+        return;
+    }
     QDir directory(dir_name);
     bool got_text;
     QString new_dir_name = QInputDialog::getText(this, "Creating new directory", "Enter name:", QLineEdit::Normal, "untitled", &got_text);
@@ -224,6 +226,9 @@ void MainWindow::on_actionDefault_Zoom_triggered()
 void MainWindow::on_actionRename_File_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Select file to rename", "");
+    if (file_name.isEmpty() && file_name.isNull()) {
+         return;
+    }
     QFile file(file_name);
     QFileInfo file_info(file_name);
     bool got_text;
@@ -241,6 +246,9 @@ void MainWindow::on_actionRename_File_triggered()
 void MainWindow::on_actionRename_Directory_triggered()
 {
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to rename", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name.isEmpty() && dir_name.isNull()) {
+         return;
+    }
     QDir directory(dir_name);
     bool got_text;
     QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, directory.dirName(), &got_text);
@@ -257,6 +265,9 @@ void MainWindow::on_actionRename_Directory_triggered()
 void MainWindow::on_actionDelete_File_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Select file to remove", "");
+    if (file_name.isEmpty() && file_name.isNull()) {
+         return;
+    }
     QFileInfo file_info(file_name);
     QMessageBox::StandardButton delete_box;
     delete_box = QMessageBox::question(this, "Delete procedure", QString("You want to delete %1?").arg(file_info.fileName()),
@@ -273,6 +284,9 @@ void MainWindow::on_actionDelete_File_triggered()
 void MainWindow::on_actionDelete_Directory_triggered()
 {
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to delete", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name.isEmpty() && dir_name.isNull()) {
+         return;
+    }
     QDir directory(dir_name);
     QMessageBox::StandardButton delete_box;
     delete_box = QMessageBox::question(this, "Delete procedure", QString("You want to delete %1?").arg(directory.dirName()),
