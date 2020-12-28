@@ -70,6 +70,16 @@ MainWindow::MainWindow(QWidget *parent)
     ui->right_path->setText(startPath);
     ui->right_path->setAlignment(Qt::AlignCenter);
     ui->left_path->setAlignment(Qt::AlignCenter);
+
+    ui->renameButton->setShortcut(QKeySequence(Qt::Key_Tab));
+    ui->editButton->setShortcut(QKeySequence(Qt::Key_Tab));
+    ui->viewButton->setShortcut(QKeySequence(Qt::Key_Tab));
+    ui->copyButton->setShortcut(QKeySequence(Qt::Key_Tab));
+    ui->moveButton->setShortcut(QKeySequence(Qt::Key_Tab));
+    ui->deleteButton->setShortcut(QKeySequence(Qt::Key_Tab));
+    ui->newFileButton->setShortcut(QKeySequence(Qt::Key_Tab));
+    ui->newDirButton->setShortcut(QKeySequence(Qt::Key_Tab));
+    ui->quitButton->setShortcut(QKeySequence(Qt::Key_Tab));
 }
 
 MainWindow::~MainWindow()
@@ -372,64 +382,123 @@ void MainWindow::on_actionMove_Directory_triggered()
 
 void MainWindow::on_copyButton_clicked()
 {
-    QFile file(left_part_path);
-    QFileInfo file_info(file);
-    QFileInfo dir_info(right_part_path);
-    if (file_info.isFile() && dir_info.isDir()) {
-        QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section("/", -1, -1));
-        if (QFile::exists(file_copy_path)){
-            QFile::remove(file_copy_path);
+    if (right_main) {
+        QFile file(left_part_path);
+        QFileInfo file_info(file);
+        QFileInfo dir_info(right_part_path);
+        if (file_info.isFile() && dir_info.isDir()) {
+            QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section("/", -1, -1));
+            if (QFile::exists(file_copy_path)){
+                QFile::remove(file_copy_path);
+            }
+            if (QFile::copy(left_part_path, file_copy_path)) {
+                return;
+            } else {
+                QMessageBox::about(this, "File copying", "Something bad happened.");
+            }
+        } else if (file_info.isDir() && dir_info.isDir()){
+            QDir from_dir(left_part_path);
+            QString to_fullpath = right_part_path + QDir::separator() + from_dir.dirName();
+            QDir to_dir(to_fullpath);
+            if (!to_dir.exists()) {
+                to_dir.mkdir(to_fullpath);
+            }
+            copyDir(left_part_path, to_fullpath);
         }
-        if (QFile::copy(left_part_path, file_copy_path)) {
-            return;
-        } else {
-            QMessageBox::about(this, "File copying", "Something bad happened.");
+    } else {
+        QFile file(right_part_path);
+        QFileInfo file_info(file);
+        QFileInfo dir_info(left_part_path);
+        if (file_info.isFile() && dir_info.isDir()) {
+            QString file_copy_path = QString("%1/%2").arg(left_part_path, file.fileName().section("/", -1, -1));
+            if (QFile::exists(file_copy_path)){
+                QFile::remove(file_copy_path);
+            }
+            if (QFile::copy(right_part_path, file_copy_path)) {
+                return;
+            } else {
+                QMessageBox::about(this, "File copying", "Something bad happened.");
+            }
+        } else if (file_info.isDir() && dir_info.isDir()){
+            QDir from_dir(right_part_path);
+            QString to_fullpath = left_part_path + QDir::separator() + from_dir.dirName();
+            QDir to_dir(to_fullpath);
+            if (!to_dir.exists()) {
+                to_dir.mkdir(to_fullpath);
+            }
+            copyDir(right_part_path, to_fullpath);
         }
-    } else if (file_info.isDir() && dir_info.isDir()){
-        QDir from_dir(left_part_path);
-        QString to_fullpath = right_part_path + QDir::separator() + from_dir.dirName();
-        QDir to_dir(to_fullpath);
-        if (!to_dir.exists()) {
-            to_dir.mkdir(to_fullpath);
-        }
-        copyDir(left_part_path, to_fullpath);
     }
+
 }
 
 void MainWindow::on_moveButton_clicked()
 {
-    QFile file(left_part_path);
-    QFileInfo file_info(file);
-    QFileInfo dir_info(right_part_path);
-    if (file_info.isFile() && dir_info.isDir()) {
-        QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section("/", -1, -1));
-        if (QFile::exists(file_copy_path)){
-            QFile::remove(file_copy_path);
-        }
-        if (QFile::copy(left_part_path, file_copy_path)) {
-            if (QFile::remove(left_part_path)) {
-               return;
+    if (right_main) {
+        QFile file(left_part_path);
+        QFileInfo file_info(file);
+        QFileInfo dir_info(right_part_path);
+        if (file_info.isFile() && dir_info.isDir()) {
+            QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section("/", -1, -1));
+            if (QFile::exists(file_copy_path)){
+                QFile::remove(file_copy_path);
+            }
+            if (QFile::copy(left_part_path, file_copy_path)) {
+                if (QFile::remove(left_part_path)) {
+                   return;
+                } else {
+                    QMessageBox::about(this, "File moving", "Something bad happened.");
+                }
+            }
+        } else if (file_info.isDir() && dir_info.isDir()){
+            QDir from_dir(left_part_path);
+            QString to_fullpath = right_part_path + QDir::separator() + from_dir.dirName();
+            QDir to_dir(to_fullpath);
+            if (!to_dir.exists()) {
+                to_dir.mkdir(to_fullpath);
+            }
+            copyDir(left_part_path, to_fullpath);
+            if (from_dir.removeRecursively()) {
+                return;
             } else {
-                QMessageBox::about(this, "File moving", "Something bad happened.");
+                QMessageBox::about(this, "Directory deleting", "Source directory not deleted.");
             }
         }
-    } else if (file_info.isDir() && dir_info.isDir()){
-        QDir from_dir(left_part_path);
-        QString to_fullpath = right_part_path + QDir::separator() + from_dir.dirName();
-        QDir to_dir(to_fullpath);
-        if (!to_dir.exists()) {
-            to_dir.mkdir(to_fullpath);
-        }
-        copyDir(left_part_path, to_fullpath);
-        if (from_dir.removeRecursively()) {
-            return;
-        } else {
-            QMessageBox::about(this, "Directory deleting", "Source directory not deleted.");
+    } else {
+        QFile file(right_part_path);
+        QFileInfo file_info(file);
+        QFileInfo dir_info(left_part_path);
+        if (file_info.isFile() && dir_info.isDir()) {
+            QString file_copy_path = QString("%1/%2").arg(left_part_path, file.fileName().section("/", -1, -1));
+            if (QFile::exists(file_copy_path)){
+                QFile::remove(file_copy_path);
+            }
+            if (QFile::copy(right_part_path, file_copy_path)) {
+                if (QFile::remove(right_part_path)) {
+                   return;
+                } else {
+                    QMessageBox::about(this, "File moving", "Something bad happened.");
+                }
+            }
+        } else if (file_info.isDir() && dir_info.isDir()){
+            QDir from_dir(right_part_path);
+            QString to_fullpath = left_part_path + QDir::separator() + from_dir.dirName();
+            QDir to_dir(to_fullpath);
+            if (!to_dir.exists()) {
+                to_dir.mkdir(to_fullpath);
+            }
+            copyDir(right_part_path, to_fullpath);
+            if (from_dir.removeRecursively()) {
+                return;
+            } else {
+                QMessageBox::about(this, "Directory deleting", "Source directory not deleted.");
+            }
         }
     }
+
 }
 
-void MainWindow::on_renameButon_clicked()
+void MainWindow::on_renameButton_clicked()
 {
     QString file_path;
     if (right_main) {

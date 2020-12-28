@@ -44,7 +44,7 @@ private slots:
     void on_actionMove_Directory_triggered();
     void on_copyButton_clicked();
     void on_moveButton_clicked();
-    void on_renameButon_clicked();
+    void on_renameButton_clicked();
     void on_deleteButton_clicked();
     void on_actionSearch_triggered();
     void on_actionExtract_triggered();
