@@ -71,15 +71,16 @@ MainWindow::MainWindow(QWidget *parent)
     ui->right_path->setAlignment(Qt::AlignCenter);
     ui->left_path->setAlignment(Qt::AlignCenter);
 
-    ui->renameButton->setShortcut(QKeySequence(Qt::Key_Tab));
-    ui->editButton->setShortcut(QKeySequence(Qt::Key_Tab));
-    ui->viewButton->setShortcut(QKeySequence(Qt::Key_Tab));
-    ui->copyButton->setShortcut(QKeySequence(Qt::Key_Tab));
-    ui->moveButton->setShortcut(QKeySequence(Qt::Key_Tab));
-    ui->deleteButton->setShortcut(QKeySequence(Qt::Key_Tab));
-    ui->newFileButton->setShortcut(QKeySequence(Qt::Key_Tab));
-    ui->newDirButton->setShortcut(QKeySequence(Qt::Key_Tab));
-    ui->quitButton->setShortcut(QKeySequence(Qt::Key_Tab));
+    // Hotkeys
+    ui->renameButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F2));
+    ui->editButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3));
+    ui->viewButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F4));
+    ui->copyButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F5));
+    ui->moveButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F6));
+    ui->deleteButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F9));
+    ui->newFileButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F7));
+    ui->newDirButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F8));
+    ui->quitButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F10));
 }
 
 MainWindow::~MainWindow()
