@@ -304,9 +304,15 @@ void MainWindow::on_actionDelete_Directory_triggered()
 void MainWindow::on_actionCopy_File_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Select file to copy", "");
+    if (file_name.isEmpty() && file_name.isNull()) {
+         return;
+    }
     QFile file(file_name);
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name.isEmpty() && dir_name.isNull()) {
+         return;
+    }
     QString file_copy_path = QString("%1/%2").arg(dir_name, file.fileName().section("/", -1, -1));
     if (QFile::exists(file_copy_path)){
         QFile::remove(file_copy_path);
@@ -341,9 +347,14 @@ void MainWindow::on_actionCopy_Directory_triggered()
 {
     QString dir_name_from = QFileDialog::getExistingDirectory(this, "Select source directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name_from.isEmpty() && dir_name_from.isNull()) {
+         return;
+    }
     QString dir_name_to = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-
+    if (dir_name_to.isEmpty() && dir_name_to.isNull()) {
+         return;
+    }
     QDir from_dir(dir_name_from);
     QString to_fullpath = dir_name_to + QDir::separator() + from_dir.dirName();
     QDir to_dir(to_fullpath);
@@ -356,9 +367,15 @@ void MainWindow::on_actionCopy_Directory_triggered()
 void MainWindow::on_actionMove_File_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Select file to move", "");
+    if (file_name.isEmpty() && file_name.isNull()) {
+         return;
+    }
     QFile file(file_name);
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name.isEmpty() && dir_name.isNull()) {
+         return;
+    }
     QString file_copy_path = QString("%1/%2").arg(dir_name, file.fileName().section("/", -1, -1));
     if (QFile::exists(file_copy_path)){
         QFile::remove(file_copy_path);
@@ -377,8 +394,14 @@ void MainWindow::on_actionMove_Directory_triggered()
 {
     QString dir_name_from = QFileDialog::getExistingDirectory(this, "Select source directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name_from.isEmpty() && dir_name_from.isNull()) {
+         return;
+    }
     QString dir_name_to = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name_to.isEmpty() && dir_name_to.isNull()) {
+         return;
+    }
     QDir from_dir(dir_name_from);
     QString to_fullpath = dir_name_to + QDir::separator() + from_dir.dirName();
     QDir to_dir(to_fullpath);
@@ -596,6 +619,9 @@ void MainWindow::on_actionSearch_triggered()
 void MainWindow::on_actionExtract_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Select archive to unzip", "");
+    if (file_name.isEmpty() && file_name.isNull()) {
+         return;
+    }
     QFileInfo file_info(file_name);
     extract(file_name, file_info.absolutePath() + QDir::separator());
 }
@@ -603,8 +629,14 @@ void MainWindow::on_actionExtract_triggered()
 void MainWindow::on_actionExtract_to_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Select archive to unzip", "");
+    if (file_name.isEmpty() && file_name.isNull()) {
+         return;
+    }
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name.isEmpty() && dir_name.isNull()) {
+         return;
+    }
     extract(file_name, dir_name + QDir::separator());
 }
 
@@ -713,18 +745,26 @@ void MainWindow::on_actionZip_Directory_triggered()
 {
     QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory to zip", "",
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name.isEmpty() && dir_name.isNull()) {
+         return;
+    }
     QDir dir(dir_name);
     bool got_text;
     QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
                                                  dir.dirName() + ".zip", &got_text);
     if (got_text) {
         archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
+    } else {
+        return;
     }
 }
 
 void MainWindow::on_actionZip_File_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Select fileto zip", "");
+    if (file_name.isEmpty() && file_name.isNull()) {
+         return;
+    }
     QFile file(file_name);
     QFileInfo file_info(file);
     bool got_text;
@@ -732,6 +772,8 @@ void MainWindow::on_actionZip_File_triggered()
                                                  file_info.fileName() + ".zip", &got_text);
     if (got_text) {
          archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_name);
+    } else {
+        return;
     }
 }
 
