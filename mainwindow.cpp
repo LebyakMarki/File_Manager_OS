@@ -170,8 +170,19 @@ void MainWindow::on_actionNew_File_triggered()
     if (!file.exists()) {
         file.open(QIODevice::ReadWrite);
         file.close();
+        return;
     } else {
-        QMessageBox::about(this, "File creation", "File already exists.");
+        QMessageBox::StandardButton exists_box;
+        exists_box = QMessageBox::question(this, "New file procedure", "There is already file with same name. Do you want to overwrite it?",
+                                         QMessageBox::No | QMessageBox::Yes);
+        if (exists_box == QMessageBox::No) {
+            return;
+        } else {
+            QFile::remove(file_name);
+            file.open(QIODevice::ReadWrite);
+            file.close();
+            return;
+        }
     }
 }
 
@@ -187,9 +198,17 @@ void MainWindow::on_actionNew_Folder_triggered()
     if (got_text && !new_dir_name.isEmpty()) {
         if (!directory.exists(new_dir_name)) {
             directory.mkdir(new_dir_name);
-            return;
         } else {
-            QMessageBox::about(this, "Directory creation", "Directory already exists.");
+            QMessageBox::StandardButton exists_box;
+            exists_box = QMessageBox::question(this, "New dir procedure", "There is already dir with same name. Do you want to overwrite it?",
+                                             QMessageBox::No | QMessageBox::Yes);
+            if (exists_box == QMessageBox::No) {
+                return;
+            } else {
+                QDir directory_existing(dir_name + QDir::separator() + new_dir_name);
+                directory_existing.removeRecursively();
+                directory.mkdir(new_dir_name);
+            }
         }
     }
 }
@@ -235,10 +254,27 @@ void MainWindow::on_actionRename_File_triggered()
     QString new_file_name = QInputDialog::getText(this, "Renaming file", "Enter new name:", QLineEdit::Normal, file_info.fileName(), &got_text);
     if (got_text && !new_file_name.isEmpty()) {
         QString new_name = QString("%1/%2").arg(file.fileName().section("/",0,-2), new_file_name);
-        if(file.rename(new_name)) {
-            return;
+        QFile file_to_rename(new_name);
+        if (!file_to_rename.exists()) {
+            if(file.rename(new_name)) {
+                return;
+            } else {
+                QMessageBox::about(this, "File renaming", "Error occured.");
+            }
         } else {
-            QMessageBox::about(this, "File renaming", "File not renamed.");
+            QMessageBox::StandardButton exists_box;
+            exists_box = QMessageBox::question(this, "Rename file procedure", "There is already file with same name. Do you want to overwrite it?",
+                                             QMessageBox::No | QMessageBox::Yes);
+            if (exists_box == QMessageBox::No) {
+                return;
+            } else {
+                QFile::remove(new_name);
+                if(file.rename(new_name)) {
+                    return;
+                } else {
+                    QMessageBox::about(this, "File renaming", "Error occured.");
+                }
+            }
         }
     }
 }
@@ -249,15 +285,34 @@ void MainWindow::on_actionRename_Directory_triggered()
     if (dir_name.isEmpty() && dir_name.isNull()) {
          return;
     }
-    QDir directory(dir_name);
+    QDir dir(dir_name);
     bool got_text;
-    QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, directory.dirName(), &got_text);
+    QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, dir.dirName(), &got_text);
     if (got_text && !new_dir_name.isEmpty()) {
         QString new_name = QString("../%1").arg(new_dir_name);
-        if (directory.rename(directory.path(), new_name)) {
-            return;
+        QString path_no_dir = dir.absolutePath().section("/",0,-2);
+        QDir directory(path_no_dir);
+        if (!directory.exists(new_dir_name)) {
+            if (dir.rename(dir.path(), new_name)) {
+                return;
+            } else {
+                QMessageBox::about(this, "Directory renaming", "Error occured.");
+            }
         } else {
-            QMessageBox::about(this, "Directory renaming", "Directory not renamed.");
+            QMessageBox::StandardButton exists_box;
+            exists_box = QMessageBox::question(this, "Rename dir procedure", "There is already dir with same name. Do you want to overwrite it?",
+                                             QMessageBox::No | QMessageBox::Yes);
+            if (exists_box == QMessageBox::No) {
+                return;
+            } else {
+                QDir directory_existing(path_no_dir + QDir::separator() + new_dir_name);
+                directory_existing.removeRecursively();
+                if (dir.rename(dir.path(), new_name)) {
+                    return;
+                } else {
+                    QMessageBox::about(this, "Directory renaming", "Error occured.");
+                }
+            }
         }
     }
 }
@@ -545,16 +600,33 @@ void MainWindow::on_renameButton_clicked()
         file_path = left_part_path;}
      QFile file(file_path);
      QFileInfo file_info(file);
-     QFileInfo dir_info(left_part_path);
+     QFileInfo dir_info(file_path);
      bool got_text;
      if (file_info.isFile()) {
          QString new_file_name = QInputDialog::getText(this, "Renaming file", "Enter new name:", QLineEdit::Normal, file_info.fileName(), &got_text);
          if (got_text && !new_file_name.isEmpty()) {
              QString new_name = QString("%1/%2").arg(file.fileName().section("/",0,-2), new_file_name);
-             if(file.rename(new_name)) {
-                 return;
+             QFile file_to_rename(new_name);
+             if (!file_to_rename.exists()) {
+                 if(file.rename(new_name)) {
+                     return;
+                 } else {
+                     QMessageBox::about(this, "File renaming", "Error occured.");
+                 }
              } else {
-                 QMessageBox::about(this, "File renaming", "File not renamed.");
+                 QMessageBox::StandardButton exists_box;
+                 exists_box = QMessageBox::question(this, "Rename file procedure", "There is already file with same name. Do you want to overwrite it?",
+                                                  QMessageBox::No | QMessageBox::Yes);
+                 if (exists_box == QMessageBox::No) {
+                     return;
+                 } else {
+                     QFile::remove(new_name);
+                     if(file.rename(new_name)) {
+                         return;
+                     } else {
+                         QMessageBox::about(this, "File renaming", "Error occured.");
+                     }
+                 }
              }
          }
      } else if (dir_info.isDir()) {
@@ -562,11 +634,29 @@ void MainWindow::on_renameButton_clicked()
          QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, dir.dirName(), &got_text);
          if (got_text && !new_dir_name.isEmpty()) {
              QString new_name = QString("../%1").arg(new_dir_name);
-             QDir directory(left_part_path);
-             if (directory.rename(directory.path(), new_name)) {
-                 return;
+             QString path_no_dir = dir.absolutePath().section("/",0,-2);
+             QDir directory(path_no_dir);
+             if (!directory.exists(new_dir_name)) {
+                 if (dir.rename(dir.path(), new_name)) {
+                     return;
+                 } else {
+                     QMessageBox::about(this, "Directory renaming", "Error occured.");
+                 }
              } else {
-                 QMessageBox::about(this, "Directory renaming", "Directory not renamed.");
+                 QMessageBox::StandardButton exists_box;
+                 exists_box = QMessageBox::question(this, "Rename dir procedure", "There is already dir with same name. Do you want to overwrite it?",
+                                                  QMessageBox::No | QMessageBox::Yes);
+                 if (exists_box == QMessageBox::No) {
+                     return;
+                 } else {
+                     QDir directory_existing(path_no_dir + QDir::separator() + new_dir_name);
+                     directory_existing.removeRecursively();
+                     if (dir.rename(dir.path(), new_name)) {
+                         return;
+                     } else {
+                         QMessageBox::about(this, "Directory renaming", "Error occured.");
+                     }
+                 }
              }
          }
      }
@@ -709,7 +799,16 @@ void MainWindow::on_newFileButton_clicked()
         file.open(QIODevice::ReadWrite);
         file.close();
     } else {
-        QMessageBox::about(this, "File creation", "File already exists.");
+        QMessageBox::StandardButton exists_box;
+        exists_box = QMessageBox::question(this, "New file procedure", "There is already file with same name. Do you want to overwrite it?",
+                                         QMessageBox::No | QMessageBox::Yes);
+        if (exists_box == QMessageBox::No) {
+            return;
+        } else {
+            QFile::remove(file_path);
+            file.open(QIODevice::ReadWrite);
+            file.close();
+        }
     }
 }
 
@@ -728,6 +827,17 @@ void MainWindow::on_newDirButton_clicked()
     }
     if (!directory.exists(new_dir_name)) {
         directory.mkdir(new_dir_name);
+    } else {
+        QMessageBox::StandardButton exists_box;
+        exists_box = QMessageBox::question(this, "New dir procedure", "There is already dir with same name. Do you want to overwrite it?",
+                                         QMessageBox::No | QMessageBox::Yes);
+        if (exists_box == QMessageBox::No) {
+            return;
+        } else {
+            QDir directory_existing(file_path + QDir::separator() + new_dir_name);
+            directory_existing.removeRecursively();
+            directory.mkdir(new_dir_name);
+        }
     }
 }
 
