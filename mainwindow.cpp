@@ -145,7 +145,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionAbout_file_manager_triggered()
 {
-    QMessageBox::about(this, "KM File manager", "This is file manager build with Qt5 and C++ skills.");
+    QMessageBox::about(this, "KM File manager", "This is file manager build with Qt5 and C++ skills.\nTo use hotkeys: press CTRL + <F key you need>.");
 }
 
 void MainWindow::on_actionTeam_triggered()
@@ -160,12 +160,16 @@ void MainWindow::on_actionAbout_Qt_triggered()
 
 void MainWindow::on_actionNew_File_triggered()
 {
-    QFileDialog file_dialog;
-    file_dialog.setFileMode(QFileDialog::AnyFile);
-    QString file_name = file_dialog.getSaveFileName(this, "Creating file", "untitled.txt", "");
-    if (file_name.isEmpty() && file_name.isNull()) {
-         return;
+    QString dir_name = QFileDialog::getExistingDirectory(this, "Select directory", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir_name.isEmpty() && dir_name.isNull()) {
+        return;
     }
+    bool got_text;
+    QString new_file_name = QInputDialog::getText(this, "Creating new file", "Enter name:", QLineEdit::Normal, "untitled.txt", &got_text);
+    if (!got_text || new_file_name.isEmpty()) {
+        return;
+    }
+    QString file_name = dir_name + QDir::separator() + new_file_name;
     QFile file(file_name);
     if (!file.exists()) {
         file.open(QIODevice::ReadWrite);
