@@ -454,7 +454,7 @@ void MainWindow::on_actionMove_File_triggered()
     QString file_copy_path = QString("%1/%2").arg(dir_name, file.fileName().section("/", -1, -1));
     if (QFile::exists(file_copy_path)){
         QMessageBox::StandardButton exists_box;
-        exists_box = QMessageBox::question(this, "Copy file procedure", "There is already file with same name. Do you want to overwrite it?",
+        exists_box = QMessageBox::question(this, "Move file procedure", "There is already file with same name. Do you want to overwrite it?",
                                          QMessageBox::No | QMessageBox::Yes);
         if (exists_box == QMessageBox::No) {
             return;
@@ -492,7 +492,7 @@ void MainWindow::on_actionMove_Directory_triggered()
         copyDir(dir_name_from, to_fullpath);
     } else {
         QMessageBox::StandardButton exists_box;
-        exists_box = QMessageBox::question(this, "Copy dir procedure", "There is already dir with same name. Do you want to overwrite it?",
+        exists_box = QMessageBox::question(this, "Move dir procedure", "There is already dir with same name. Do you want to overwrite it?",
                                          QMessageBox::No | QMessageBox::Yes);
         if (exists_box == QMessageBox::No) {
             return;
@@ -506,7 +506,7 @@ void MainWindow::on_actionMove_Directory_triggered()
     if (from_dir.removeRecursively()) {
         return;
     } else {
-        QMessageBox::about(this, "Directory deleting", "Source directory not deleted.");
+        QMessageBox::about(this, "Directory moving", "Source directory not deleted.");
     }
 }
 
@@ -599,7 +599,6 @@ void MainWindow::on_copyButton_clicked()
             }
         }
     }
-
 }
 
 void MainWindow::on_moveButton_clicked()
@@ -703,7 +702,6 @@ void MainWindow::on_moveButton_clicked()
             }
         }
     }
-
 }
 
 void MainWindow::on_renameButton_clicked()
