@@ -33,13 +33,21 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     // Setting up models and initial path for them
+
     QString startPath = QDir::homePath();
     dirmodel_1= new QFileSystemModel(this);
     dirmodel_2= new QFileSystemModel(this);
     ui->tableView_1->setModel(dirmodel_1);
     ui->tableView_2->setModel(dirmodel_2);
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
+    dirmodel_1->setRootPath(dirmodel_1->myComputer().toString());
+    dirmodel_2->setRootPath(dirmodel_2->myComputer().toString());
+#else
     dirmodel_1->setRootPath(startPath);
     dirmodel_2->setRootPath(startPath);
+#endif
+
     dirmodel_1->setFilter(QDir::AllEntries | QDir::NoDot);
     dirmodel_2->setFilter(QDir::AllEntries | QDir::NoDot);
     ui->tableView_1->setRootIndex(dirmodel_1->index(startPath));
@@ -165,7 +173,7 @@ void MainWindow::on_actionNew_File_triggered()
         return;
     }
     bool got_text;
-    QString new_file_name = QInputDialog::getText(this, "Creating new file", "Enter name:", QLineEdit::Normal, "untitled.txt", &got_text);
+    QString new_file_name = QInputDialog::getText(this, "Creating new file", "Enter name:", QLineEdit::Normal, "New File", &got_text);
     if (!got_text || new_file_name.isEmpty()) {
         return;
     }
@@ -905,7 +913,7 @@ void MainWindow::on_newFileButton_clicked()
     } else {
         file_path = left_part_path;}
     bool got_text;
-    QString new_file_name = QInputDialog::getText(this, "Creating file", "Enter name:", QLineEdit::Normal, "untitled.txt", &got_text);
+    QString new_file_name = QInputDialog::getText(this, "Creating file", "Enter name:", QLineEdit::Normal, "New File", &got_text);
     if (new_file_name.isEmpty()) {
          return;
     }
@@ -914,9 +922,6 @@ void MainWindow::on_newFileButton_clicked()
     QFile file(file_path);
     if (!file.exists()) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
-        QTextStream out(&file);
-        out << "File created :)";
-        file.flush();
         file.close();
     } else {
         QMessageBox::StandardButton exists_box;
@@ -927,9 +932,6 @@ void MainWindow::on_newFileButton_clicked()
         } else {
             QFile::remove(file_path);
             file.open(QIODevice::WriteOnly | QIODevice::Text);
-            QTextStream out(&file);
-            out << "File created :)";
-            file.flush();
             file.close();
         }
     }
