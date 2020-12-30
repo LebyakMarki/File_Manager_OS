@@ -41,8 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_2->setModel(dirmodel_2);
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-    dirmodel_1->setRootPath(dirmodel_1->myComputer().toString());
-    dirmodel_2->setRootPath(dirmodel_2->myComputer().toString());
+    dirmodel_1->setRootPath("");
+    dirmodel_2->setRootPath("");
 #else
     dirmodel_1->setRootPath(startPath);
     dirmodel_2->setRootPath(startPath);
