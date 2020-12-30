@@ -8,6 +8,7 @@
 #include "archives.h"
 #include <archive.h>
 #include <archive_entry.h>
+#include <QCompleter>
 #include <string.h>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -89,6 +90,15 @@ MainWindow::MainWindow(QWidget *parent)
 #if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
     ui->left_path->setText(startPathWindows);
     ui->right_path->setText(startPathWindows);
+
+    QDir dir(startPathWindows);
+    QStringList disks = dir.entryList();
+    QCompleter *completer = new QCompleter(disks, this);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setFilterMode(Qt::MatchContains);
+    completer->setCompletionMode(QCompleter::PopupCompletion);
+    ui->left_path->setCompleter(completer);
+    ui->right_path->setCompleter(completer);
 #else
     ui->left_path->setText(startPath);
     ui->right_path->setText(startPath);
@@ -98,17 +108,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->left_path->setAlignment(Qt::AlignCenter);
 
     // Hotkeys
-#ifdef __APPLE__
-    ui->renameButton->setShortcut(QKeySequence(Qt::Key_Control + Qt::Key_F2));
-    ui->editButton->setShortcut(QKeySequence(Qt::Key_Control + Qt::Key_F3));
-    ui->viewButton->setShortcut(QKeySequence(Qt::Key_Control + Qt::Key_F4));
-    ui->copyButton->setShortcut(QKeySequence(Qt::Key_Control + Qt::Key_F5));
-    ui->moveButton->setShortcut(QKeySequence(Qt::Key_Control + Qt::Key_F6));
-    ui->deleteButton->setShortcut(QKeySequence(Qt::Key_Control + Qt::Key_F9));
-    ui->newFileButton->setShortcut(QKeySequence(Qt::Key_Control + Qt::Key_F7));
-    ui->newDirButton->setShortcut(QKeySequence(Qt::Key_Control + Qt::Key_F8));
-    ui->quitButton->setShortcut(QKeySequence(Qt::Key_Control + Qt::Key_F10));
-#else
     ui->renameButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F2));
     ui->editButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3));
     ui->viewButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F4));
@@ -118,7 +117,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->newFileButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F7));
     ui->newDirButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F8));
     ui->quitButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F10));
-#endif
 }
 
 MainWindow::~MainWindow()
