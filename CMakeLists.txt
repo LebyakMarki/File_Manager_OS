@@ -21,7 +21,7 @@ include_directories(${LibArchive_INCLUDE_DIRS})
 set(images_resources images.qrc)
 qt5_add_resources(images_resources_rcc ${images_resources})
 
-add_executable(File_Manager
+add_executable(KManager
     main.cpp
     mainwindow.cpp
     mainwindow.h
@@ -34,4 +34,4 @@ add_executable(File_Manager
     ${images_resources_rcc}
 )
 
-target_link_libraries(File_Manager PRIVATE Qt5::Widgets ${LibArchive_LIBRARIES})
+target_link_libraries(KManager PRIVATE Qt5::Widgets ${LibArchive_LIBRARIES})

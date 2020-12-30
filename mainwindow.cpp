@@ -959,7 +959,9 @@ void MainWindow::on_actionShow_in_Terminal_triggered()
     QProcess* proc = new QProcess(this);
     proc->setWorkingDirectory(file_path);
 #ifdef __APPLE__
-    proc->setProgram("/Applications/Utilities/Terminal.app");
+    proc->setProgram("/System/Applications/Utilities/Terminal.app");
+#elif defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
+    proc->startDetached("cmd.exe");
 #else
     proc->setProgram("/usr/bin/gnome-terminal");
 #endif
