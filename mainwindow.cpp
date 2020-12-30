@@ -35,14 +35,15 @@ MainWindow::MainWindow(QWidget *parent)
     // Setting up models and initial path for them
 
     QString startPath = QDir::homePath();
+    QString startPathWindows = "";
     dirmodel_1= new QFileSystemModel(this);
     dirmodel_2= new QFileSystemModel(this);
     ui->tableView_1->setModel(dirmodel_1);
     ui->tableView_2->setModel(dirmodel_2);
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-    dirmodel_1->setRootPath("");
-    dirmodel_2->setRootPath("");
+    dirmodel_1->setRootPath(startPathWindows);
+    dirmodel_2->setRootPath(startPathWindows);
 #else
     dirmodel_1->setRootPath(startPath);
     dirmodel_2->setRootPath(startPath);
@@ -50,8 +51,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     dirmodel_1->setFilter(QDir::AllEntries | QDir::NoDot);
     dirmodel_2->setFilter(QDir::AllEntries | QDir::NoDot);
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
+    ui->tableView_1->setRootIndex(dirmodel_1->index(startPathWindows));
+    ui->tableView_2->setRootIndex(dirmodel_2->index(startPathWindows));
+#else
     ui->tableView_1->setRootIndex(dirmodel_1->index(startPath));
     ui->tableView_2->setRootIndex(dirmodel_2->index(startPath));
+#endif
 
     // Set resizing options for two table views
     ui->tableView_1->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -70,12 +77,23 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_2->setAlternatingRowColors(true);
 
     // Setting paths
+#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
+    right_part_path = startPathWindows;
+    left_part_path = startPathWindows;
+#else
     right_part_path = startPath;
     left_part_path = startPath;
+#endif
 
     // Showing paths
+#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
+    ui->left_path->setText(startPathWindows);
+    ui->right_path->setText(startPathWindows);
+#else
     ui->left_path->setText(startPath);
     ui->right_path->setText(startPath);
+#endif
+
     ui->right_path->setAlignment(Qt::AlignCenter);
     ui->left_path->setAlignment(Qt::AlignCenter);
 
