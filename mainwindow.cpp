@@ -909,11 +909,7 @@ void MainWindow::on_newFileButton_clicked()
     if (new_file_name.isEmpty()) {
          return;
     }
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-    file_path += "\";
-#else
-    file_path += "/";
-#endif
+    file_path += QDir::separator();
     file_path += new_file_name;
     QFile file(file_path);
     if (!file.exists()) {
