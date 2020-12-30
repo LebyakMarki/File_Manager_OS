@@ -914,6 +914,9 @@ void MainWindow::on_newFileButton_clicked()
     QFile file(file_path);
     if (!file.exists()) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream out(&file);
+        out << "File created :)";
+        file.flush();
         file.close();
     } else {
         QMessageBox::StandardButton exists_box;
@@ -924,6 +927,9 @@ void MainWindow::on_newFileButton_clicked()
         } else {
             QFile::remove(file_path);
             file.open(QIODevice::WriteOnly | QIODevice::Text);
+            QTextStream out(&file);
+            out << "File created :)";
+            file.flush();
             file.close();
         }
     }
