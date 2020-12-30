@@ -172,7 +172,7 @@ void MainWindow::on_actionNew_File_triggered()
     QString file_name = dir_name + QDir::separator() + new_file_name;
     QFile file(file_name);
     if (!file.exists()) {
-        file.open(QIODevice::ReadWrite);
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
         file.close();
         return;
     } else {
@@ -183,7 +183,7 @@ void MainWindow::on_actionNew_File_triggered()
             return;
         } else {
             QFile::remove(file_name);
-            file.open(QIODevice::ReadWrite);
+            file.open(QIODevice::WriteOnly | QIODevice::Text);
             file.close();
             return;
         }
@@ -913,7 +913,7 @@ void MainWindow::on_newFileButton_clicked()
     file_path += new_file_name;
     QFile file(file_path);
     if (!file.exists()) {
-        file.open(QIODevice::ReadWrite);
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
         file.close();
     } else {
         QMessageBox::StandardButton exists_box;
@@ -923,7 +923,7 @@ void MainWindow::on_newFileButton_clicked()
             return;
         } else {
             QFile::remove(file_path);
-            file.open(QIODevice::ReadWrite);
+            file.open(QIODevice::WriteOnly | QIODevice::Text);
             file.close();
         }
     }
