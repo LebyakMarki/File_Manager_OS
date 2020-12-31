@@ -92,10 +92,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->right_path->setText(startPathWindows);
 
     QDir dir(startPathWindows);
-    QStringList disks = dir.entryList();
+    QStringList disks = dir.entryList(QStringList(), QDir::Drives);
     QCompleter *completer = new QCompleter(disks, this);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
-    completer->setFilterMode(Qt::MatchContains);
     completer->setCompletionMode(QCompleter::PopupCompletion);
     ui->left_path->setCompleter(completer);
     ui->right_path->setCompleter(completer);
@@ -201,7 +200,7 @@ void MainWindow::on_actionNew_File_triggered()
         return;
     }
     bool got_text;
-    QString new_file_name = QInputDialog::getText(this, "Creating new file", "Enter name:", QLineEdit::Normal, "New File", &got_text);
+    QString new_file_name = QInputDialog::getText(this, "Creating new file", "Enter name:", QLineEdit::Normal, "untitled.txt", &got_text);
     if (!got_text || new_file_name.isEmpty()) {
         return;
     }
@@ -234,7 +233,7 @@ void MainWindow::on_actionNew_Folder_triggered()
     }
     QDir directory(dir_name);
     bool got_text;
-    QString new_dir_name = QInputDialog::getText(this, "Creating new directory", "Enter name:", QLineEdit::Normal, "New Folder", &got_text);
+    QString new_dir_name = QInputDialog::getText(this, "Creating new directory", "Enter name:", QLineEdit::Normal, "folder", &got_text);
     if (got_text && !new_dir_name.isEmpty()) {
         if (!directory.exists(new_dir_name)) {
             directory.mkdir(new_dir_name);
@@ -986,7 +985,7 @@ void MainWindow::on_newFileButton_clicked()
     } else {
         file_path = left_part_path;}
     bool got_text;
-    QString new_file_name = QInputDialog::getText(this, "Creating file", "Enter name:", QLineEdit::Normal, "New File", &got_text);
+    QString new_file_name = QInputDialog::getText(this, "Creating file", "Enter name:", QLineEdit::Normal, "untitled.txt", &got_text);
     if (new_file_name.isEmpty()) {
          return;
     }
@@ -1019,7 +1018,7 @@ void MainWindow::on_newDirButton_clicked()
         file_path = left_part_path;}
     QDir directory(file_path);
     bool got_text;
-    QString new_dir_name = QInputDialog::getText(this, "Creating directory", "Enter name:", QLineEdit::Normal, "New Folder", &got_text);
+    QString new_dir_name = QInputDialog::getText(this, "Creating directory", "Enter name:", QLineEdit::Normal, "folder", &got_text);
     if (new_dir_name.isEmpty()) {
          return;
     }
@@ -1108,4 +1107,27 @@ void MainWindow::on_right_path_editingFinished()
         ui->right_path->setText(current_path);
         right_part_path = current_path;
     }
+}
+
+
+
+void MainWindow::on_left_path_textChanged(const QString &arg1)
+{
+#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
+    if (ui->left_path->text().isEmpty()) {
+        ui->left_path->completer()->setCompletionPrefix("");
+        ui->left_path->completer()->complete();
+    }
+#endif
+}
+
+
+void MainWindow::on_right_path_textChanged(const QString &arg1)
+{
+#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
+    if (ui->right_path->text().isEmpty()) {
+        ui->right_path->completer()->setCompletionPrefix("");
+        ui->right_path->completer()->complete();
+    }
+#endif
 }

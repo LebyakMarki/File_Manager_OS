@@ -61,6 +61,11 @@ private slots:
     void on_left_path_editingFinished();
     void on_right_path_editingFinished();
 
+
+    void on_left_path_textChanged(const QString &arg1);
+
+    void on_right_path_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirmodel_1;

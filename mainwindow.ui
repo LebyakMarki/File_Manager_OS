@@ -16,11 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="0">
-     <widget class="QLineEdit" name="left_path">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-     </widget>
+     <widget class="QLineEdit" name="left_path"/>
     </item>
     <item row="1" column="1">
      <widget class="QLineEdit" name="right_path"/>
