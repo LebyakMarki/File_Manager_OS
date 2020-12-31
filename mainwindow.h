@@ -60,11 +60,8 @@ private slots:
     void on_actionZip_File_triggered();
     void on_left_path_editingFinished();
     void on_right_path_editingFinished();
-
-
-    void on_left_path_textChanged(const QString &arg1);
-
-    void on_right_path_textChanged(const QString &arg1);
+    void on_backButtonLeft_clicked();
+    void on_backButtonRight_clicked();
 
 private:
     Ui::MainWindow *ui;

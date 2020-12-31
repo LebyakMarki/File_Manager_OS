@@ -90,14 +90,6 @@ MainWindow::MainWindow(QWidget *parent)
 #if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
     ui->left_path->setText(startPathWindows);
     ui->right_path->setText(startPathWindows);
-
-    QDir dir(startPathWindows);
-    QStringList disks = dir.entryList(QStringList(), QDir::Drives);
-    QCompleter *completer = new QCompleter(disks, this);
-    completer->setCaseSensitivity(Qt::CaseInsensitive);
-    completer->setCompletionMode(QCompleter::PopupCompletion);
-    ui->left_path->setCompleter(completer);
-    ui->right_path->setCompleter(completer);
 #else
     ui->left_path->setText(startPath);
     ui->right_path->setText(startPath);
@@ -1110,24 +1102,28 @@ void MainWindow::on_right_path_editingFinished()
 }
 
 
-
-void MainWindow::on_left_path_textChanged(const QString &arg1)
+void MainWindow::on_backButtonLeft_clicked()
 {
 #if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-    if (ui->left_path->text().isEmpty()) {
-        ui->left_path->completer()->setCompletionPrefix("");
-        ui->left_path->completer()->complete();
-    }
+    ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(""));
+    ui->left_path->setText("");
+    left_part_path = "";
+#else
+    ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(QDir::homePath()));
+    ui->left_path->setText(QDir::homePath());
+    left_part_path = QDir::homePath();
 #endif
 }
 
-
-void MainWindow::on_right_path_textChanged(const QString &arg1)
+void MainWindow::on_backButtonRight_clicked()
 {
 #if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-    if (ui->right_path->text().isEmpty()) {
-        ui->right_path->completer()->setCompletionPrefix("");
-        ui->right_path->completer()->complete();
-    }
+    ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(""));
+    ui->right_path->setText("");
+    right_part_path = "";
+#else
+    ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(QDir::homePath()));
+    ui->right_path->setText(QDir::homePath());
+    right_part_path = QDir::homePath();
 #endif
 }
