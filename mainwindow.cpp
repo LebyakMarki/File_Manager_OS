@@ -1016,9 +1016,14 @@ void MainWindow::on_actionZip_Directory_triggered()
     }
     QDir dir(dir_name);
     bool got_text;
+    QString source_filename = dir.dirName();
+    source_filename = source_filename.simplified();
+    source_filename.replace(" ", "-");
     QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
-                                                 dir.dirName() + ".zip", &got_text);
+                                                 source_filename + ".zip", &got_text);
     if (got_text) {
+        archive_name = archive_name.simplified();
+        archive_name.replace(" ", "-");
         QFile file(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name);
         if (!file.exists()) {
             archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
@@ -1047,9 +1052,15 @@ void MainWindow::on_actionZip_File_triggered()
     QFile file(file_name);
     QFileInfo file_info(file);
     bool got_text;
+    QString source_filename;
+    source_filename = file_info.fileName();
+    source_filename = source_filename.simplified();
+    source_filename.replace(" ", "-");
     QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
-                                                 file_info.fileName() + ".zip", &got_text);
+                                                 source_filename + ".zip", &got_text);
     if (got_text) {
+        archive_name = archive_name.simplified();
+        archive_name.replace(" ", "-");
         QFile file(file_info.absolutePath() + QDir::separator() + archive_name);
         if (!file.exists()) {
             archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_name);
@@ -1142,14 +1153,18 @@ void MainWindow::on_zipButton_clicked()
     QFileInfo dir_info(file_path);
     if (file_info.isFile()) {
         bool got_text;
+        QString source_filename;
+        source_filename = file_info.fileName();
+        source_filename = source_filename.simplified();
+        source_filename.replace(" ", "-");
         QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
-                                                     file_info.fileName() + ".zip", &got_text);
+                                                     source_filename + ".zip", &got_text);
         if (got_text) {
-            QFile file(file_info.absolutePath() + QDir::separator() + archive_name);
-            qDebug() << file_info.absolutePath() + QDir::separator() + archive_name;
-            qDebug() << file_path;
+            archive_name = archive_name.simplified();
+            archive_name.replace(" ", "-");
+            QFile file(file_info.absolutePath() + "/" + archive_name);
             if (!file.exists()) {
-                archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_path);
+                archive_folder(file_info.absolutePath() + "/" + archive_name, file_path);
             } else {
                 QMessageBox::StandardButton exists_box;
                 exists_box = QMessageBox::question(this, "New archive", "There is already zip with same name. Do you want to overwrite it?",
@@ -1157,8 +1172,8 @@ void MainWindow::on_zipButton_clicked()
                 if (exists_box == QMessageBox::No) {
                     return;
                 } else {
-                    QFile::remove(file_info.absolutePath() + QDir::separator() + archive_name);
-                    archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_path);
+                    QFile::remove(file_info.absolutePath() + "/" + archive_name);
+                    archive_folder(file_info.absolutePath() + "/" + archive_name, file_path);
                 }
             }
         } else {
@@ -1167,9 +1182,15 @@ void MainWindow::on_zipButton_clicked()
     } else if (dir_info.isDir()) {
         QDir dir(file_path);
         bool got_text;
+        QString source_filename;
+        source_filename = dir.dirName();
+        source_filename = source_filename.simplified();
+        source_filename.replace(" ", "-");
         QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
-                                                     dir.dirName() + ".zip", &got_text);
+                                                     source_filename + ".zip", &got_text);
         if (got_text) {
+            archive_name = archive_name.simplified();
+            archive_name.replace(" ", "-");
             QFile file(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name);
             if (!file.exists()) {
                 archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, file_path + QDir::separator());
