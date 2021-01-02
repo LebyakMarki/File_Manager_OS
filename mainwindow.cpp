@@ -69,6 +69,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_1->verticalHeader()->setVisible(false);
     ui->tableView_2->verticalHeader()->setVisible(false);
 
+    // Sorting
+    ui->tableView_1->setSortingEnabled(true);
+    ui->tableView_2->setSortingEnabled(true);
+
+
     // Removing Line separator
     ui->tableView_1->setShowGrid(false);
     ui->tableView_2->setShowGrid(false);
@@ -99,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->left_path->setAlignment(Qt::AlignCenter);
 
     // Hotkeys
+#if !defined(__APPLE__)
     ui->renameButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F2));
     ui->editButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3));
     ui->viewButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F4));
@@ -108,6 +114,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->newFileButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F7));
     ui->newDirButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F8));
     ui->quitButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F10));
+#endif
 }
 
 MainWindow::~MainWindow()
@@ -122,8 +129,21 @@ void MainWindow::on_tableView_1_clicked(const QModelIndex &index)
     if (sPath == "/..") {
         return;
     }
+    ui->tableView_2->clearSelection();
     ui->left_path->setText(sPath);
     left_part_path = sPath;
+}
+
+void MainWindow::on_tableView_2_clicked(const QModelIndex &index)
+{
+    right_main = true;
+    QString sPath = dirmodel_2->fileInfo(index).absoluteFilePath();
+    if (sPath == "/..") {
+        return;
+    }
+    ui->tableView_1->clearSelection();
+    ui->right_path->setText(sPath);
+    right_part_path = sPath;
 }
 
 void MainWindow::on_tableView_1_doubleClicked(const QModelIndex &index)
@@ -136,17 +156,6 @@ void MainWindow::on_tableView_1_doubleClicked(const QModelIndex &index)
     ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(sPath));
     ui->left_path->setText(sPath);
     left_part_path = sPath;
-}
-
-void MainWindow::on_tableView_2_clicked(const QModelIndex &index)
-{
-    right_main = true;
-    QString sPath = dirmodel_2->fileInfo(index).absoluteFilePath();
-    if (sPath == "/..") {
-        return;
-    }
-    ui->right_path->setText(sPath);
-    right_part_path = sPath;
 }
 
 void MainWindow::on_tableView_2_doubleClicked(const QModelIndex &index)
@@ -1108,10 +1117,12 @@ void MainWindow::on_backButtonLeft_clicked()
     ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(""));
     ui->left_path->setText("");
     left_part_path = "";
+    right_main = false;
 #else
     ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(QDir::homePath()));
     ui->left_path->setText(QDir::homePath());
     left_part_path = QDir::homePath();
+    right_main = false;
 #endif
 }
 
@@ -1121,9 +1132,11 @@ void MainWindow::on_backButtonRight_clicked()
     ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(""));
     ui->right_path->setText("");
     right_part_path = "";
+    right_main = true;
 #else
     ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(QDir::homePath()));
     ui->right_path->setText(QDir::homePath());
     right_part_path = QDir::homePath();
+    right_main = true;
 #endif
 }
