@@ -19,7 +19,7 @@
      <widget class="QPushButton" name="backButtonLeft">
       <property name="maximumSize">
        <size>
-        <width>50</width>
+        <width>70</width>
         <height>16777215</height>
        </size>
       </property>
@@ -48,7 +48,7 @@
      <widget class="QPushButton" name="backButtonRight">
       <property name="maximumSize">
        <size>
-        <width>50</width>
+        <width>70</width>
         <height>16777215</height>
        </size>
       </property>
