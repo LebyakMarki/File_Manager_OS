@@ -72,6 +72,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Sorting
     ui->tableView_1->setSortingEnabled(true);
     ui->tableView_2->setSortingEnabled(true);
+    ui->tableView_1->sortByColumn(0, Qt::AscendingOrder);
+    ui->tableView_2->sortByColumn(0, Qt::AscendingOrder);
+
 
 
     // Removing Line separator
@@ -819,7 +822,7 @@ void MainWindow::on_renameButton_clicked()
          QString new_file_name = QInputDialog::getText(this, "Renaming file", "Enter new name:", QLineEdit::Normal, file_info.fileName(), &got_text);
          if (got_text && !new_file_name.isEmpty()) {
 #if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-            QString new_name = QString("%1\%2").arg(file.fileName().section(QDir::separator(),0,-2), new_file_name);
+             QString new_name = file.fileName().section(QDir::separator(),0,-2) + QDir::separator() + new_file_name;
 #else
             QString new_name = QString("%1/%2").arg(file.fileName().section(QDir::separator(),0,-2), new_file_name);
 #endif
@@ -851,7 +854,7 @@ void MainWindow::on_renameButton_clicked()
          QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, dir.dirName(), &got_text);
          if (got_text && !new_dir_name.isEmpty()) {
 #if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-            QString new_name = QString("..\%1").arg(new_dir_name);
+            QString new_name = ".." + QDir::separator() + new_dir_name;
 #else
             QString new_name = QString("../%1").arg(new_dir_name);
 #endif
