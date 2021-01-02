@@ -19,7 +19,12 @@ def make_zipfile(output_filename, entry):
 
 
 if __name__ == '__main__':
-    # python zip.py file dir ... file name.zip
+    # python zip.py file name.zip
     arch = sys.argv[len(sys.argv) - 1]
 
-    make_zipfile(arch, sys.argv[1])
+    source = sys.argv[1]
+    for i in range(2, len(sys.argv)-1):
+        source += " "
+        source += sys.argv[i]
+        
+    make_zipfile(arch, source)
