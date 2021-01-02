@@ -100,9 +100,23 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="zipButton">
+        <property name="text">
+         <string>F10 Zip</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="extractButton">
+        <property name="text">
+         <string>F11 Extract</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="quitButton">
         <property name="text">
-         <string>F10 Quit</string>
+         <string>F12 Quit</string>
         </property>
        </widget>
       </item>

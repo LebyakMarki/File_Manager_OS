@@ -110,10 +110,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->viewButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F4));
     ui->copyButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F5));
     ui->moveButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F6));
-    ui->deleteButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F9));
     ui->newFileButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F7));
     ui->newDirButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F8));
-    ui->quitButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F10));
+    ui->deleteButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F9));
+    ui->zipButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F10));
+    ui->extractButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F11));
+    ui->quitButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F12));
 #endif
 }
 
@@ -892,7 +894,6 @@ void MainWindow::on_deleteButton_clicked()
                 QMessageBox::about(this, "Directory deleting", "Directory not deleted.");
             }
         }
-
     }
 }
 
@@ -901,31 +902,6 @@ void MainWindow::on_actionSearch_triggered()
     searchDialog->show();
     searchDialog->activateWindow();
 }
-
-void MainWindow::on_actionExtract_triggered()
-{
-    QString file_name = QFileDialog::getOpenFileName(this, "Select archive to unzip", "");
-    if (file_name.isEmpty() && file_name.isNull()) {
-         return;
-    }
-    QFileInfo file_info(file_name);
-    extract(file_name, file_info.absolutePath() + QDir::separator());
-}
-
-void MainWindow::on_actionExtract_to_triggered()
-{
-    QString file_name = QFileDialog::getOpenFileName(this, "Select archive to unzip", "");
-    if (file_name.isEmpty() && file_name.isNull()) {
-         return;
-    }
-    QString dir_name = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
-                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if (dir_name.isEmpty() && dir_name.isNull()) {
-         return;
-    }
-    extract(file_name, dir_name + QDir::separator());
-}
-
 
 void MainWindow::on_viewButton_clicked()
 {
@@ -1061,7 +1037,20 @@ void MainWindow::on_actionZip_Directory_triggered()
     QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
                                                  dir.dirName() + ".zip", &got_text);
     if (got_text) {
-        archive_folder(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
+        QFile file(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name);
+        if (!file.exists()) {
+            archive_folder(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
+        } else {
+            QMessageBox::StandardButton exists_box;
+            exists_box = QMessageBox::question(this, "New archive", "There is already zip with same name. Do you want to overwrite it?",
+                                             QMessageBox::No | QMessageBox::Yes);
+            if (exists_box == QMessageBox::No) {
+                return;
+            } else {
+                QFile::remove(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name);
+                archive_folder(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
+            }
+        }
     } else {
         return;
     }
@@ -1079,7 +1068,20 @@ void MainWindow::on_actionZip_File_triggered()
     QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
                                                  file_info.fileName() + ".zip", &got_text);
     if (got_text) {
-         archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_name);
+        QFile file(file_info.absolutePath() + QDir::separator() + archive_name);
+        if (!file.exists()) {
+            archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_name);
+        } else {
+            QMessageBox::StandardButton exists_box;
+            exists_box = QMessageBox::question(this, "New archive", "There is already zip with same name. Do you want to overwrite it?",
+                                             QMessageBox::No | QMessageBox::Yes);
+            if (exists_box == QMessageBox::No) {
+                return;
+            } else {
+                QFile::remove(file_info.absolutePath() + QDir::separator() + archive_name);
+                archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_name);
+            }
+        }
     } else {
         return;
     }
@@ -1140,3 +1142,123 @@ void MainWindow::on_backButtonRight_clicked()
     right_main = true;
 #endif
 }
+
+
+void MainWindow::on_zipButton_clicked()
+{
+    QString file_path;
+    if (right_main) {
+        file_path = right_part_path;
+    } else {
+        file_path = left_part_path;}
+    QFile file(file_path);
+    QFileInfo file_info(file);
+    QFileInfo dir_info(file_path);
+    if (file_info.isFile()) {
+        bool got_text;
+        QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
+                                                     file_info.fileName() + ".zip", &got_text);
+        if (got_text) {
+            QFile file(file_info.absolutePath() + QDir::separator() + archive_name);
+            if (!file.exists()) {
+                archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_path);
+            } else {
+                QMessageBox::StandardButton exists_box;
+                exists_box = QMessageBox::question(this, "New archive", "There is already zip with same name. Do you want to overwrite it?",
+                                                 QMessageBox::No | QMessageBox::Yes);
+                if (exists_box == QMessageBox::No) {
+                    return;
+                } else {
+                    QFile::remove(file_info.absolutePath() + QDir::separator() + archive_name);
+                    archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_path);
+                }
+            }
+        } else {
+            return;
+        }
+    } else if (dir_info.isDir()) {
+        QDir dir(file_path);
+        bool got_text;
+        QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
+                                                     dir.dirName() + ".zip", &got_text);
+        if (got_text) {
+            QFile file(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name);
+            if (!file.exists()) {
+                archive_folder(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name, file_path + QDir::separator());
+            } else {
+                QMessageBox::StandardButton exists_box;
+                exists_box = QMessageBox::question(this, "New archive", "There is already zip with same name. Do you want to overwrite it?",
+                                                 QMessageBox::No | QMessageBox::Yes);
+                if (exists_box == QMessageBox::No) {
+                    return;
+                } else {
+                    QFile::remove(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name);
+                    archive_folder(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name, file_path + QDir::separator());
+                }
+            }
+        } else {
+            return;
+        }
+    }
+}
+
+void MainWindow::on_actionExtract_triggered()
+{
+    QString file_name = QFileDialog::getOpenFileName(this, "Select archive to unzip", "");
+    if (file_name.isEmpty() && file_name.isNull()) {
+         return;
+    }
+    if (file_name.endsWith(".zip", Qt::CaseInsensitive)) {
+        QFileInfo file_info(file_name);
+        if (extract(file_name, file_info.absolutePath() + QDir::separator()) != 0) {
+            QMessageBox::about(this, "Zip extracting", "Error occured.");
+        }
+    } else {
+        return;
+    }
+}
+
+void MainWindow::on_actionExtract_to_triggered()
+{
+    QString file_name = QFileDialog::getOpenFileName(this, "Select archive to unzip", "");
+    if (file_name.isEmpty() && file_name.isNull()) {
+         return;
+    }
+    if (file_name.endsWith(".zip", Qt::CaseInsensitive)) {
+        QString dir_name = QFileDialog::getExistingDirectory(this, "Select destination directory", "",
+                                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+        if (dir_name.isEmpty() && dir_name.isNull()) {
+             return;
+        }
+        if (extract(file_name, dir_name + QDir::separator()) != 1111) {
+            QMessageBox::about(this, "Zip extracting", "Error occured.");
+        }
+    } else {
+        return;
+    }
+
+}
+
+void MainWindow::on_extractButton_clicked()
+{
+    QString file_path;
+    if (right_main) {
+        file_path = right_part_path;
+    } else {
+        file_path = left_part_path;}
+    if (file_path.endsWith(".zip", Qt::CaseInsensitive)) {
+        QFileInfo file_info(file_path);
+        if (extract(file_path, file_info.absolutePath() + QDir::separator()) != 1111) {
+            QMessageBox::about(this, "Zip extracting", "Error occured.");
+        }
+    } else {
+        return;
+    }
+}
+
+
+
+
+
+
+

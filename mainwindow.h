@@ -62,6 +62,8 @@ private slots:
     void on_right_path_editingFinished();
     void on_backButtonLeft_clicked();
     void on_backButtonRight_clicked();
+    void on_zipButton_clicked();
+    void on_extractButton_clicked();
 
 private:
     Ui::MainWindow *ui;

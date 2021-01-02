@@ -18,8 +18,7 @@
 
 
 void archive_folder(const QString& arhive_name, const QString& filename) {
-    std::string name = "../File_Manager_OS-master/zip.py ";
-
+    std::string name = "../File_Manager_OS/zip.py ";
     name += filename.toStdString();
     name += " ";
     name += arhive_name.toStdString();
@@ -28,7 +27,6 @@ void archive_folder(const QString& arhive_name, const QString& filename) {
 #else
     std::string command = "python3 ";
 #endif
-    // std::string command = "python3 ";
     command += name;
     system(command.c_str());
     return;
@@ -50,36 +48,35 @@ int copy_data(struct archive *ar, struct archive *aw) {
 }
 
 
-void extract(const QString& file_from, const QString& file_to) {
+int extract(const QString& file_from, const QString& file_to) {
     struct archive *a;
     struct archive *ext;
     struct archive_entry *entry;
     int r;
     a = archive_read_new();
     archive_read_support_format_all(a);
-    archive_read_support_compression_all(a);
     ext = archive_write_disk_new();
     archive_write_disk_set_options(ext, ARCHIVE_EXTRACT_TIME | ARCHIVE_EXTRACT_PERM | ARCHIVE_EXTRACT_ACL | ARCHIVE_EXTRACT_FFLAGS);
     archive_write_disk_set_standard_lookup(ext);
     const std::string output = file_to.toStdString() + '/';
-    if ((r = archive_read_open_filename(a, file_from.toStdString().c_str(), 10240))){return;}
+    if ((r = archive_read_open_filename(a, file_from.toStdString().c_str(), 10240))){return -1;}
     for (;;) {
         r = archive_read_next_header(a, &entry);
         if (r == ARCHIVE_EOF) {break;}
-        if (r < ARCHIVE_WARN) {return;}
+        if (r < ARCHIVE_WARN) {return -1;}
         std::string new_entry = output + archive_entry_pathname(entry);
         archive_entry_set_pathname(entry, new_entry.c_str());
         r = archive_write_header(ext, entry);
         if (archive_entry_size(entry) > 0) {
             r = copy_data(a, ext);
-            if (r < ARCHIVE_WARN) {return;}
+            if (r < ARCHIVE_WARN) {return -1;}
         }
         r = archive_write_finish_entry(ext);
-        if (r < ARCHIVE_WARN) {return;}
+        if (r < ARCHIVE_WARN) {return -1;}
     }
     archive_read_close(a);
     archive_read_free(a);
     archive_write_close(ext);
     archive_write_free(ext);
-    return;
+    return 1111;
 }
