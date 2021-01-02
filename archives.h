@@ -18,7 +18,7 @@
 
 
 void archive_folder(const QString& arhive_name, const QString& filename) {
-    std::string name = "../File_Manager_OS/zip.py ";
+    std::string name = "../zip.py ";
     name += filename.toStdString();
     name += " ";
     name += arhive_name.toStdString();

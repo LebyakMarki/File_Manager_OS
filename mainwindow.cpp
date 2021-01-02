@@ -86,9 +86,13 @@ MainWindow::MainWindow(QWidget *parent)
 #if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
     right_part_path = startPathWindows;
     left_part_path = startPathWindows;
+    left_root = startPathWindows;
+    right_root = startPathWindows;
 #else
     right_part_path = startPath;
     left_part_path = startPath;
+    left_root = startPath;
+    right_root = startPath;
 #endif
 
     // Showing paths
@@ -158,6 +162,7 @@ void MainWindow::on_tableView_1_doubleClicked(const QModelIndex &index)
     ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(sPath));
     ui->left_path->setText(sPath);
     left_part_path = sPath;
+    left_root = sPath;
 }
 
 void MainWindow::on_tableView_2_doubleClicked(const QModelIndex &index)
@@ -170,7 +175,25 @@ void MainWindow::on_tableView_2_doubleClicked(const QModelIndex &index)
     ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(sPath));
     ui->right_path->setText(sPath);
     right_part_path = sPath;
+    right_root = sPath;
 }
+
+void MainWindow::on_currButtonLeft_clicked()
+{
+    right_main = false;
+    ui->tableView_2->clearSelection();
+    ui->left_path->setText(left_root);
+    left_part_path = left_root;
+}
+
+void MainWindow::on_currButtonRight_clicked()
+{
+    right_main = true;
+    ui->tableView_1->clearSelection();
+    ui->right_path->setText(right_root);
+    right_part_path = right_root;
+}
+
 
 void MainWindow::on_actionExit_triggered()
 {
@@ -1120,11 +1143,13 @@ void MainWindow::on_backButtonLeft_clicked()
     ui->left_path->setText("");
     left_part_path = "";
     right_main = false;
+    left_root = "";
 #else
     ui->tableView_1->setRootIndex(dirmodel_1->setRootPath(QDir::homePath()));
     ui->left_path->setText(QDir::homePath());
     left_part_path = QDir::homePath();
     right_main = false;
+    left_root = QDir::homePath();
 #endif
 }
 
@@ -1135,11 +1160,13 @@ void MainWindow::on_backButtonRight_clicked()
     ui->right_path->setText("");
     right_part_path = "";
     right_main = true;
+    right_root = "";
 #else
     ui->tableView_2->setRootIndex(dirmodel_2->setRootPath(QDir::homePath()));
     ui->right_path->setText(QDir::homePath());
     right_part_path = QDir::homePath();
     right_main = true;
+    right_root = QDir::homePath();
 #endif
 }
 
@@ -1255,10 +1282,3 @@ void MainWindow::on_extractButton_clicked()
         return;
     }
 }
-
-
-
-
-
-
-

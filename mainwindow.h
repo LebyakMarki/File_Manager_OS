@@ -64,6 +64,8 @@ private slots:
     void on_backButtonRight_clicked();
     void on_zipButton_clicked();
     void on_extractButton_clicked();
+    void on_currButtonLeft_clicked();
+    void on_currButtonRight_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -75,5 +77,7 @@ private:
     bool right_main;
     QUrl currUrl;
     QScopedPointer<SearchDialog> searchDialog;
+    QString left_root;
+    QString right_root;
 };
 #endif // MAINWINDOW_H
