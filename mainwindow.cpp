@@ -75,8 +75,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_1->sortByColumn(0, Qt::AscendingOrder);
     ui->tableView_2->sortByColumn(0, Qt::AscendingOrder);
 
-
-
     // Removing Line separator
     ui->tableView_1->setShowGrid(false);
     ui->tableView_2->setShowGrid(false);
@@ -321,12 +319,7 @@ void MainWindow::on_actionRename_File_triggered()
     bool got_text;
     QString new_file_name = QInputDialog::getText(this, "Renaming file", "Enter new name:", QLineEdit::Normal, file_info.fileName(), &got_text);
     if (got_text && !new_file_name.isEmpty()) {
-
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-        QString new_name = QString("%1\%2").arg(file.fileName().section(QDir::separator(),0,-2), new_file_name);
-#else
-        QString new_name = QString("%1/%2").arg(file.fileName().section(QDir::separator(),0,-2), new_file_name);
-#endif
+        QString new_name = QString("%1/%2").arg(file.fileName().section("/",0,-2), new_file_name);
         QFile file_to_rename(new_name);
         if (!file_to_rename.exists()) {
             if(file.rename(new_name)) {
@@ -362,13 +355,8 @@ void MainWindow::on_actionRename_Directory_triggered()
     bool got_text;
     QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, dir.dirName(), &got_text);
     if (got_text && !new_dir_name.isEmpty()) {
-
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-        QString new_name = QString("..\%1").arg(new_dir_name);
-#else
         QString new_name = QString("../%1").arg(new_dir_name);
-#endif
-        QString path_no_dir = dir.absolutePath().section(QDir::separator(),0,-2);
+        QString path_no_dir = dir.absolutePath().section("/",0,-2);
         QDir directory(path_no_dir);
         if (!directory.exists(new_dir_name)) {
             if (dir.rename(dir.path(), new_name)) {
@@ -446,11 +434,7 @@ void MainWindow::on_actionCopy_File_triggered()
     if (dir_name.isEmpty() && dir_name.isNull()) {
          return;
     }
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-    QString file_copy_path = QString("%1\%2").arg(dir_name, file.fileName().section(QDir::separator(), -1, -1));
-#else
-    QString file_copy_path = QString("%1/%2").arg(dir_name, file.fileName().section(QDir::separator(), -1, -1));
-#endif
+    QString file_copy_path = QString("%1/%2").arg(dir_name, file.fileName().section("/", -1, -1));
 
     if (QFile::exists(file_copy_path)){
         QMessageBox::StandardButton exists_box;
@@ -534,11 +518,7 @@ void MainWindow::on_actionMove_File_triggered()
     if (dir_name.isEmpty() && dir_name.isNull()) {
          return;
     }
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-    QString file_copy_path = QString("%1\%2").arg(dir_name, file.fileName().section(QDir::separator(), -1, -1));
-#else
-    QString file_copy_path = QString("%1/%2").arg(dir_name, file.fileName().section(QDir::separator(), -1, -1));
-#endif
+    QString file_copy_path = QString("%1/%2").arg(dir_name, file.fileName().section("/", -1, -1));
     if (QFile::exists(file_copy_path)){
         QMessageBox::StandardButton exists_box;
         exists_box = QMessageBox::question(this, "Move file procedure", "There is already file with same name. Do you want to overwrite it?",
@@ -606,11 +586,7 @@ void MainWindow::on_copyButton_clicked()
         QFileInfo file_info(file);
         QFileInfo dir_info(right_part_path);
         if (file_info.isFile() && dir_info.isDir()) {
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-            QString file_copy_path = QString("%1\%2").arg(right_part_path, file.fileName().section(QDir::separator(), -1, -1));
-#else
-            QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section(QDir::separator(), -1, -1));
-#endif
+            QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section("/", -1, -1));
             if (QFile::exists(file_copy_path)){
                 QMessageBox::StandardButton exists_box;
                 exists_box = QMessageBox::question(this, "Copy file procedure", "There is already file with same name. Do you want to overwrite it?",
@@ -652,11 +628,7 @@ void MainWindow::on_copyButton_clicked()
         QFileInfo file_info(file);
         QFileInfo dir_info(left_part_path);
         if (file_info.isFile() && dir_info.isDir()) {
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-            QString file_copy_path = QString("%1\%2").arg(left_part_path, file.fileName().section(QDir::separator(), -1, -1));
-#else
-            QString file_copy_path = QString("%1/%2").arg(left_part_path, file.fileName().section(QDir::separator(), -1, -1));
-#endif
+            QString file_copy_path = QString("%1/%2").arg(left_part_path, file.fileName().section("/", -1, -1));
             if (QFile::exists(file_copy_path)){
                 QMessageBox::StandardButton exists_box;
                 exists_box = QMessageBox::question(this, "Copy file procedure", "There is already file with same name. Do you want to overwrite it?",
@@ -703,11 +675,7 @@ void MainWindow::on_moveButton_clicked()
         QFileInfo file_info(file);
         QFileInfo dir_info(right_part_path);
         if (file_info.isFile() && dir_info.isDir()) {
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-            QString file_copy_path = QString("%1\%2").arg(right_part_path, file.fileName().section(QDir::separator(), -1, -1));
-#else
-            QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section(QDir::separator(), -1, -1));
-#endif
+            QString file_copy_path = QString("%1/%2").arg(right_part_path, file.fileName().section("/", -1, -1));
             if (QFile::exists(file_copy_path)){
                 QMessageBox::StandardButton exists_box;
                 exists_box = QMessageBox::question(this, "Copy file procedure", "There is already file with same name. Do you want to overwrite it?",
@@ -756,11 +724,7 @@ void MainWindow::on_moveButton_clicked()
         QFileInfo file_info(file);
         QFileInfo dir_info(left_part_path);
         if (file_info.isFile() && dir_info.isDir()) {           
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-            QString file_copy_path = QString("%1\%2").arg(left_part_path, file.fileName().section(QDir::separator(), -1, -1));
-#else
-            QString file_copy_path = QString("%1/%2").arg(left_part_path, file.fileName().section(QDir::separator(), -1, -1));
-#endif
+            QString file_copy_path = QString("%1/%2").arg(left_part_path, file.fileName().section("/", -1, -1));
             if (QFile::exists(file_copy_path)){
                 QMessageBox::StandardButton exists_box;
                 exists_box = QMessageBox::question(this, "Copy file procedure", "There is already file with same name. Do you want to overwrite it?",
@@ -821,11 +785,7 @@ void MainWindow::on_renameButton_clicked()
      if (file_info.isFile()) {
          QString new_file_name = QInputDialog::getText(this, "Renaming file", "Enter new name:", QLineEdit::Normal, file_info.fileName(), &got_text);
          if (got_text && !new_file_name.isEmpty()) {
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-             QString new_name = file.fileName().section(QDir::separator(),0,-2) + QDir::separator() + new_file_name;
-#else
-            QString new_name = QString("%1/%2").arg(file.fileName().section(QDir::separator(),0,-2), new_file_name);
-#endif
+            QString new_name = QString("%1/%2").arg(file.fileName().section("/",0,-2), new_file_name);
              QFile file_to_rename(new_name);
              if (!file_to_rename.exists()) {
                  if(file.rename(new_name)) {
@@ -853,12 +813,8 @@ void MainWindow::on_renameButton_clicked()
          QDir dir(file_path);
          QString new_dir_name = QInputDialog::getText(this, "Renaming directory", "Enter new name:", QLineEdit::Normal, dir.dirName(), &got_text);
          if (got_text && !new_dir_name.isEmpty()) {
-#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
-            QString new_name = ".." + QDir::separator() + new_dir_name;
-#else
             QString new_name = QString("../%1").arg(new_dir_name);
-#endif
-             QString path_no_dir = dir.absolutePath().section(QDir::separator(),0,-2);
+             QString path_no_dir = dir.absolutePath().section("/",0,-2);
              QDir directory(path_no_dir);
              if (!directory.exists(new_dir_name)) {
                  if (dir.rename(dir.path(), new_name)) {
@@ -1063,9 +1019,9 @@ void MainWindow::on_actionZip_Directory_triggered()
     QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
                                                  dir.dirName() + ".zip", &got_text);
     if (got_text) {
-        QFile file(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name);
+        QFile file(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name);
         if (!file.exists()) {
-            archive_folder(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
+            archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
         } else {
             QMessageBox::StandardButton exists_box;
             exists_box = QMessageBox::question(this, "New archive", "There is already zip with same name. Do you want to overwrite it?",
@@ -1073,8 +1029,8 @@ void MainWindow::on_actionZip_Directory_triggered()
             if (exists_box == QMessageBox::No) {
                 return;
             } else {
-                QFile::remove(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name);
-                archive_folder(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
+                QFile::remove(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name);
+                archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, dir_name + QDir::separator());
             }
         }
     } else {
@@ -1212,9 +1168,9 @@ void MainWindow::on_zipButton_clicked()
         QString archive_name = QInputDialog::getText(this, "Compressing file/directory", "Enter new name:", QLineEdit::Normal,
                                                      dir.dirName() + ".zip", &got_text);
         if (got_text) {
-            QFile file(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name);
+            QFile file(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name);
             if (!file.exists()) {
-                archive_folder(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name, file_path + QDir::separator());
+                archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, file_path + QDir::separator());
             } else {
                 QMessageBox::StandardButton exists_box;
                 exists_box = QMessageBox::question(this, "New archive", "There is already zip with same name. Do you want to overwrite it?",
@@ -1222,8 +1178,8 @@ void MainWindow::on_zipButton_clicked()
                 if (exists_box == QMessageBox::No) {
                     return;
                 } else {
-                    QFile::remove(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name);
-                    archive_folder(dir.absolutePath().section(QDir::separator(), 0, -2) + QDir::separator() + archive_name, file_path + QDir::separator());
+                    QFile::remove(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name);
+                    archive_folder(dir.absolutePath().section("/", 0, -2) + QDir::separator() + archive_name, file_path + QDir::separator());
                 }
             }
         } else {
