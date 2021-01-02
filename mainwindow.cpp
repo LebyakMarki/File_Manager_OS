@@ -1146,6 +1146,8 @@ void MainWindow::on_zipButton_clicked()
                                                      file_info.fileName() + ".zip", &got_text);
         if (got_text) {
             QFile file(file_info.absolutePath() + QDir::separator() + archive_name);
+            qDebug() << file_info.absolutePath() + QDir::separator() + archive_name;
+            qDebug() << file_path;
             if (!file.exists()) {
                 archive_folder(file_info.absolutePath() + QDir::separator() + archive_name, file_path);
             } else {
