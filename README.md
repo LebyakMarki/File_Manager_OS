@@ -1,6 +1,5 @@
 # Repository with orthodox file manager implementation
 #### Team: Lebyak Markiyan, Katya Detsyk
-#### KManager (Katya Marki manager)
 ![](icons/logo_100.png)
 
 ### About
