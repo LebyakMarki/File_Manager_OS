@@ -87,7 +87,11 @@ void SearchDialog::on_start_searching_button_clicked()
     QString type = ui->fileTypeBox->currentText();
 
     if (browsePaths.isEmpty()) {
+#if defined(WIN32) || defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN)
+        QString homeDir = "";
+#else
         QString homeDir = QDir::homePath();
+#endif
         QString path = QDir::cleanPath(homeDir);
         currentDir = QDir(path);
         QDirIterator it(path, filter, QDir::AllEntries | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
