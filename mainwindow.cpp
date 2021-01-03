@@ -1219,7 +1219,7 @@ void MainWindow::on_actionExtract_triggered()
     }
     if (file_name.endsWith(".zip", Qt::CaseInsensitive)) {
         QFileInfo file_info(file_name);
-        if (extract(file_name, file_info.absolutePath() + QDir::separator()) != 0) {
+        if (extract(file_name, file_info.absolutePath() + QDir::separator()) != 1111) {
             QMessageBox::about(this, "Zip extracting", "Error occured.");
         }
     } else {
